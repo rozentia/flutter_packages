@@ -1,0 +1,16 @@
+include: package:lint/analysis_options.yaml
+
+linter:
+  rules:
+    - parameter_assignments
+    
+analyzer:
+  exclude:
+    - lib/**/*.g.dart
+    - lib/**/*.freezed.dart
+    - lib/**/*.config.dart
+  errors:
+    missing_required_param: error
+    parameter_assignments: error
+    missing_return: error
+    must_be_immutable: error

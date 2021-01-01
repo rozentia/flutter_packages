@@ -1,0 +1,22 @@
+name: auth_module
+description: Base authentication module
+version: 0.0.1
+author: Enrique Velasco
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_sign_in: ^4.5.6
+  http: ^0.12.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^1.3.0
+  mockito: ^4.1.3
+
+flutter: null

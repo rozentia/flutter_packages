@@ -1,0 +1,23 @@
+name: sfpro_iconset
+description: Custom set of cupertino icons
+version: 0.0.1+1
+author: Enrique Velasco
+# homepage:
+
+environment:
+  sdk: ">=2.7.0 <=3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  fonts:
+    - family: SFProIconSet
+      fonts:
+        - asset: lib/font/SFProIconSet.ttf
