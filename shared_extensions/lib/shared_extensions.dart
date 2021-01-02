@@ -1,7 +1,10 @@
+/// Custom all purpose shareable extensions
 library shared_extensions;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export './src/color.dart';
+export './src/date_time.dart';
+export './src/duration.dart';
+export './src/iterables/iterable_date_time.dart';
+export './src/num/double.dart';
+export './src/num/int.dart';
+export './src/string.dart';
