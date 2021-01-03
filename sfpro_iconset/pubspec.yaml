@@ -1,5 +1,5 @@
 name: sfpro_iconset
-description: Custom set of cupertino icons
+description: Custom set of cupertino icons not available in the regular package
 version: 0.0.1+1
 author: Enrique Velasco
 # homepage:
@@ -20,4 +20,4 @@ flutter:
   fonts:
     - family: SFProIconSet
       fonts:
-        - asset: lib/font/SFProIconSet.ttf
+        - asset: font/sfpro_icon_set.ttf
