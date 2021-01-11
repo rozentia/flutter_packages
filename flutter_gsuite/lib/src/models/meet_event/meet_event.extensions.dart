@@ -1,8 +1,7 @@
 import 'package:flamingo/flamingo.dart';
 import 'package:googleapis/admin/reports_v1.dart';
+import 'package:shared_extensions/shared_extensions.dart';
 
-import '../../extensions/date_time.dart';
-import '../../extensions/string.dart';
 import '../conference/conference.m.dart';
 import 'meet_event.m.dart';
 

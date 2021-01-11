@@ -7,6 +7,7 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';
 
 const List<String> SCOPES = [
+  'email',
   //= Calendar
   CalendarApi.CalendarScope,
   CalendarApi.CalendarEventsScope,
@@ -18,11 +19,11 @@ const List<String> SCOPES = [
   ClassroomApi.ClassroomRostersScope,
   ClassroomApi.ClassroomTopicsScope,
   //= Admin Directory
-  AdminApi.AdminDirectoryUserScope,
-  AdminApi.AdminDirectoryGroupMemberScope,
-  AdminApi.AdminDirectoryGroupScope,
+  // AdminApi.AdminDirectoryUserScope,
+  // AdminApi.AdminDirectoryGroupMemberScope,
+  // AdminApi.AdminDirectoryGroupScope,
   //= Admin Reports
-  report.AdminApi.AdminReportsAuditReadonlyScope
+  // report.AdminApi.AdminReportsAuditReadonlyScope
 ];
 
 const List<String> ADMIN_SCOPES = [

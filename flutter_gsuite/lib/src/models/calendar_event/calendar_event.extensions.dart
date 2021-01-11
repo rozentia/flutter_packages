@@ -1,4 +1,4 @@
-import '../../extensions/date_time.dart';
+import 'package:shared_extensions/shared_extensions.dart';
 
 import 'calendar_event.m.dart';
 

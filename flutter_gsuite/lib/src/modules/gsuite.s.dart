@@ -1,16 +1,15 @@
 import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
 // import '../../core/failures.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 import 'package:googleapis/admin/directory_v1.dart';
 import 'package:googleapis/admin/reports_v1.dart' as reports;
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:shared_extensions/shared_extensions.dart';
 
 import '../constants/constants.dart';
-import '../extensions/date_time.dart';
 import '../models/calendar_event/calendar_event.m.dart';
 import '../models/classroom/course_model.m.dart';
 import '../models/meet_event/meet_event.extensions.dart';
@@ -27,27 +26,36 @@ class GsuiteService {
   AuthClient _client;
   AuthClient _adminClient;
   String _userEmail;
-  final List<String> _scopesRequiringConsent = [];
-  final GoogleSignIn _googleSignIn;
 
-  GsuiteService({GoogleSignIn googleSignIn}) : _googleSignIn = googleSignIn {
-    //= Subscribe to changes in GoogleSignIn to set user client accordingly
-    _googleSignIn.onCurrentUserChanged.listen((account) {
-      if (account == null) {
-        _client = null;
-        _userEmail = null;
-      } else {
-        _userEmail = account.email;
-        _googleSignIn.authenticatedClient().then((client) => _client = client);
-      }
-    });
-    _googleSignIn.signInSilently();
-  }
+  GsuiteService();
+  // TODO Review this stream subscription
+  /*
+    {
+    if (googleSignIn != null) {
+      //= Subscribe to changes in GoogleSignIn to set user client accordingly
+      _googleSignIn.onCurrentUserChanged.listen((account) {
+        if (account == null) {
+          _client = null;
+          _userEmail = null;
+        } else {
+          _userEmail = account.email;
+          _googleSignIn
+              .authenticatedClient()
+              .then((client) => _client = client);
+        }
+      });
+      _googleSignIn.signInSilently();
+    }
+    }
+  */
 
   /// The scopes that require consent of the user to use this library
-  List<String> get scopesRequiringConsent => _scopesRequiringConsent;
+  String get userEmail => _userEmail;
 
+  /// True if the client is set
   bool get hasClient => _client != null;
+
+  /// True is the super admin client is set
   bool get hasAdminClient => _adminClient != null;
 
   AdminApi get _adminApi => _client != null ? AdminApi(_client) : null;
@@ -60,48 +68,29 @@ class GsuiteService {
       _adminClient != null ? reports.AdminApi(_adminClient) : null;
 
   //-                                                  @factoryMethod
-  static Future<GsuiteService> init(
-    String googleAdminServiceAccountCredentials,
-    String googleAdminEmail,
-    GoogleSignIn googleSignIn,
-  ) async {
+  static Future<GsuiteService> init({
+    @required String serviceAccountJSONCredentials,
+    @required String googleAdminEmail,
+  }) async {
     try {
-      //= Merge any scopes already set in GoogleSignIn instance
-      //= with the ones required by this library
-      final currentScopes = googleSignIn.scopes;
-      final List<String> scopesRequiringConsent = [];
-      for (final scope in SCOPES) {
-        if (!currentScopes.contains(scope)) {
-          // ignore: avoid_print
-          print(
-              'Warning: GsuiteService requires scope $scope to be included in GoogleSignIn instance');
-        }
-      }
-
       final gsuiteService = GsuiteService();
 
       //= Request required scopes consent if already signed in
-      if (await googleSignIn.isSignedIn() &&
-          scopesRequiringConsent.isNotEmpty) {
-        await googleSignIn.requestScopes(scopesRequiringConsent);
-      }
+      // if (await googleSignIn.isSignedIn() &&
+      //     scopesRequiringConsent.isNotEmpty) {
+      //   await googleSignIn.requestScopes(scopesRequiringConsent);
+      // }
 
       //= Set service account superadmin client
-      if (googleAdminServiceAccountCredentials != null &&
-          googleAdminServiceAccountCredentials.isNotEmpty) {
+      if (serviceAccountJSONCredentials != null &&
+          serviceAccountJSONCredentials.isNotEmpty &&
+          googleAdminEmail != null &&
+          googleAdminEmail.isNotEmpty) {
         await gsuiteService.setAdminClient(
-          serviceAccountJSONCredentials: googleAdminServiceAccountCredentials,
-          userEmail: googleAdminEmail,
+          serviceAccountJSONCredentials: serviceAccountJSONCredentials,
+          adminEmail: googleAdminEmail,
         );
       }
-
-      gsuiteService.setClient(client: await googleSignIn.authenticatedClient());
-      // if (googleServiceAccountCredentials != null &&
-      //     googleServiceAccountCredentials.isNotEmpty) {
-      //   await gsuiteService.setClient(
-      //       serviceAccountJSONCredentials: googleServiceAccountCredentials,
-      //       userEmail: firebaseAuthInstance?.currentUser?.email);
-      // }
       return gsuiteService;
     } catch (e) {
       rethrow;
@@ -112,16 +101,32 @@ class GsuiteService {
   /// providing [serviceAccountJSONCredentials] and a [userEmail] for impersonating a user.\
   /// The raw client or the service account must have the required scopes used in this package.
   Future<void> setClient({
-    String userEmail,
+    @required String userEmail,
     String serviceAccountJSONCredentials,
     AuthClient client,
   }) async {
     if (client != null) {
+      print('using provided client');
+      final List<String> scopesRequiringConsent = [];
+      for (final scope in SCOPES) {
+        if (!client.credentials.scopes.contains(scope)) {
+          scopesRequiringConsent.add(scope);
+        }
+      }
+      if (scopesRequiringConsent.isNotEmpty) {
+        print(
+            'The following scopes are missing in GoogleSignIn:\n${scopesRequiringConsent.join('\n')}\nPlease add them to GoogleSignIn instance');
+      }
       _client = client;
+      _userEmail = userEmail;
+      print('client set? $hasClient');
+      print('user email set? ${_userEmail != null}');
       return;
     }
     if (serviceAccountJSONCredentials == null ||
-        serviceAccountJSONCredentials.isEmpty) {
+        serviceAccountJSONCredentials.isEmpty ||
+        userEmail == null ||
+        userEmail.isEmpty) {
       throw Exception('Unable to set client: invalid credentials provided');
     }
     try {
@@ -137,7 +142,7 @@ class GsuiteService {
   /// and a [userEmail] for impersonating a user.\
   /// The raw client or the service account must have the required scopes used in this package.
   Future<void> setAdminClient({
-    String userEmail,
+    String adminEmail,
     String serviceAccountJSONCredentials,
     AuthClient client,
   }) async {
@@ -151,16 +156,22 @@ class GsuiteService {
           'Unable to set admin client: invalid credentials provided');
     }
     try {
-      _adminClient =
-          await getAccessClient(serviceAccountJSONCredentials, userEmail);
+      _adminClient = await clientViaServiceAccount(
+        ServiceAccountCredentials.fromJson(
+          serviceAccountJSONCredentials,
+          impersonatedUser: adminEmail,
+        ),
+        ADMIN_SCOPES,
+      );
+      // await getAccessClient(serviceAccountJSONCredentials, userEmail);
       _userEmail = userEmail;
     } catch (e) {
       rethrow;
     }
   }
 
-  /// Clear registered clients
-  void clearClients() {
+  /// Clear signed in user's client (does not dispose of the superAdmin auth client)
+  void clearClient() {
     _client = null;
     _userEmail = null;
   }
@@ -299,6 +310,9 @@ class GsuiteService {
         final fetched = await _calendarApi.calendarList.list();
         calendars.addAll(fetched.items.map((calendar) => calendar.id));
       }
+      if (calendars.isEmpty) {
+        return [];
+      }
 
       final List<Tuple2<String, Event>> response = [];
 
@@ -307,7 +321,7 @@ class GsuiteService {
           calendarId,
           singleEvents: true,
           timeMin: DateTime.now().toUtc(),
-          timeMax: endOfToday().toUtc(),
+          timeMax: DateTime.now().endOfToday.toUtc(),
         );
         if (events.items.isEmpty) continue;
 
