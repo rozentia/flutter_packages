@@ -1,9 +1,9 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
-class IndividualStudentsOptionsAdapter
-    extends TypeAdapter<IndividualStudentsOptions> {
+import '../../../constants/hive_constants.dart';
+
+class IndividualStudentsOptionsAdapter extends TypeAdapter<IndividualStudentsOptions> {
   @override
   final int typeId = TYPE_ID_INDIVIDUAL_ST_OPTIONS;
 
@@ -14,7 +14,7 @@ class IndividualStudentsOptionsAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = IndividualStudentsOptions();
-    resource.studentIds = fields[0] as List<String>;
+    resource.studentIds = (fields[0] as List)?.cast<String>();
     return resource;
   }
 
@@ -32,7 +32,5 @@ class IndividualStudentsOptionsAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is IndividualStudentsOptionsAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is IndividualStudentsOptionsAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

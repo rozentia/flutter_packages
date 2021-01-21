@@ -1,6 +1,7 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
+
+import '../../../constants/hive_constants.dart';
 
 class AnnouncementAdapter extends TypeAdapter<Announcement> {
   @override
@@ -20,7 +21,7 @@ class AnnouncementAdapter extends TypeAdapter<Announcement> {
     course.creationTime = fields[4] as String;
     course.id = fields[5] as String;
     course.individualStudentsOptions = fields[6] as IndividualStudentsOptions;
-    course.materials = fields[7] as List<Material>;
+    course.materials = (fields[7] as List)?.cast<Material>();
     course.scheduledTime = fields[8] as String;
     course.state = fields[9] as String;
     course.text = fields[10] as String;
@@ -64,7 +65,5 @@ class AnnouncementAdapter extends TypeAdapter<Announcement> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AnnouncementAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AnnouncementAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

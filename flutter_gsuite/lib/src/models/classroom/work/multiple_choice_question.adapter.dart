@@ -1,9 +1,9 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
-class MultipleChoiceQuestionAdapter
-    extends TypeAdapter<MultipleChoiceQuestion> {
+import '../../../constants/hive_constants.dart';
+
+class MultipleChoiceQuestionAdapter extends TypeAdapter<MultipleChoiceQuestion> {
   @override
   final int typeId = TYPE_ID_MULTIPLE_CHOICE_QUESTION;
 
@@ -14,7 +14,7 @@ class MultipleChoiceQuestionAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = MultipleChoiceQuestion();
-    resource.choices = fields[0] as List<String>;
+    resource.choices = (fields[0] as List)?.cast<String>();
 
     return resource;
   }
@@ -33,7 +33,5 @@ class MultipleChoiceQuestionAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MultipleChoiceQuestionAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is MultipleChoiceQuestionAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

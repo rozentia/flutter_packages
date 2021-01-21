@@ -14,7 +14,7 @@ class AssignmentSubmissionAdapter extends TypeAdapter<AssignmentSubmission> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = AssignmentSubmission();
-    resource.attachments = fields[0] as List<Attachment>;
+    resource.attachments = (fields[0] as List)?.cast<Attachment>();
     return resource;
   }
 
@@ -32,7 +32,5 @@ class AssignmentSubmissionAdapter extends TypeAdapter<AssignmentSubmission> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AssignmentSubmissionAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AssignmentSubmissionAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

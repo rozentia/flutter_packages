@@ -1,6 +1,7 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
+
+import '../../../constants/hive_constants.dart';
 
 class MaterialAdapter extends TypeAdapter<Material> {
   @override
@@ -39,8 +40,5 @@ class MaterialAdapter extends TypeAdapter<Material> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MaterialAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is MaterialAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

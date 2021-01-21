@@ -24,9 +24,8 @@ class CourseWorkAdapter extends TypeAdapter<CourseWork> {
     resource.id = fields[7] as String;
     resource.dueDate = fields[8] as Date;
     resource.dueTime = fields[9] as TimeOfDay;
-    resource.individualStudentsOptions =
-        fields[10] as IndividualStudentsOptions;
-    resource.materials = fields[11] as List<Material>;
+    resource.individualStudentsOptions = fields[10] as IndividualStudentsOptions;
+    resource.materials = (fields[11] as List)?.cast<Material>();
     resource.maxPoints = fields[12] as double;
     resource.updateTime = fields[13] as String;
     resource.multipleChoiceQuestion = fields[14] as MultipleChoiceQuestion;
@@ -94,7 +93,5 @@ class CourseWorkAdapter extends TypeAdapter<CourseWork> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CourseWorkAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CourseWorkAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

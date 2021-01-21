@@ -29,7 +29,7 @@ class StudentSubmissionAdapter extends TypeAdapter<StudentSubmission> {
     resource.multipleChoiceSubmission = fields[12] as MultipleChoiceSubmission;
     resource.shortAnswerSubmission = fields[13] as ShortAnswerSubmission;
     resource.state = fields[14] as String;
-    resource.submissionHistory = fields[15] as List<SubmissionHistory>;
+    resource.submissionHistory = (fields[15] as List)?.cast<SubmissionHistory>();
     resource.userId = fields[16] as String;
 
     return resource;
@@ -81,7 +81,5 @@ class StudentSubmissionAdapter extends TypeAdapter<StudentSubmission> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StudentSubmissionAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is StudentSubmissionAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

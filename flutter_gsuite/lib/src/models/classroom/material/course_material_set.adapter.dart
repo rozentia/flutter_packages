@@ -1,6 +1,7 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
+
+import '../../../constants/hive_constants.dart';
 
 class CourseMaterialSetAdapter extends TypeAdapter<CourseMaterialSet> {
   @override
@@ -13,7 +14,7 @@ class CourseMaterialSetAdapter extends TypeAdapter<CourseMaterialSet> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = CourseMaterialSet();
-    resource.materials = fields[0] as List<CourseMaterial>;
+    resource.materials = (fields[0] as List)?.cast<CourseMaterial>();
     resource.title = fields[1] as String;
     return resource;
   }
@@ -34,7 +35,5 @@ class CourseMaterialSetAdapter extends TypeAdapter<CourseMaterialSet> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CourseMaterialSetAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CourseMaterialSetAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

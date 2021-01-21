@@ -10,7 +10,6 @@ part 'value_objects.freezed.dart';
 /// * "full" : Include all fields associated with this user.
 @freezed
 abstract class UserProjection with _$UserProjection {
-  const factory UserProjection.undefined() = _Undefined;
   const factory UserProjection.basic() = _Basic;
   const factory UserProjection.custom() = _Custom;
   const factory UserProjection.full() = _Full;
@@ -18,11 +17,10 @@ abstract class UserProjection with _$UserProjection {
 
 extension UserProjectionValue on UserProjection {
   String get value => maybeWhen<String>(
-        undefined: () => 'undefined',
         basic: () => 'basic',
         custom: () => 'custom',
         full: () => 'full',
-        orElse: () => 'undefined',
+        orElse: () => 'basic',
       );
 }
 

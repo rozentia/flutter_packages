@@ -14,11 +14,6 @@ class _$UserProjectionTearOff {
   const _$UserProjectionTearOff();
 
 // ignore: unused_element
-  _Undefined undefined() {
-    return const _Undefined();
-  }
-
-// ignore: unused_element
   _Basic basic() {
     return const _Basic();
   }
@@ -42,14 +37,12 @@ const $UserProjection = _$UserProjectionTearOff();
 mixin _$UserProjection {
   @optionalTypeArgs
   TResult when<TResult extends Object>({
-    @required TResult undefined(),
     @required TResult basic(),
     @required TResult custom(),
     @required TResult full(),
   });
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>({
-    TResult undefined(),
     TResult basic(),
     TResult custom(),
     TResult full(),
@@ -57,14 +50,12 @@ mixin _$UserProjection {
   });
   @optionalTypeArgs
   TResult map<TResult extends Object>({
-    @required TResult undefined(_Undefined value),
     @required TResult basic(_Basic value),
     @required TResult custom(_Custom value),
     @required TResult full(_Full value),
   });
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>({
-    TResult undefined(_Undefined value),
     TResult basic(_Basic value),
     TResult custom(_Custom value),
     TResult full(_Full value),
@@ -87,107 +78,6 @@ class _$UserProjectionCopyWithImpl<$Res>
   final UserProjection _value;
   // ignore: unused_field
   final $Res Function(UserProjection) _then;
-}
-
-/// @nodoc
-abstract class _$UndefinedCopyWith<$Res> {
-  factory _$UndefinedCopyWith(
-          _Undefined value, $Res Function(_Undefined) then) =
-      __$UndefinedCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$UndefinedCopyWithImpl<$Res> extends _$UserProjectionCopyWithImpl<$Res>
-    implements _$UndefinedCopyWith<$Res> {
-  __$UndefinedCopyWithImpl(_Undefined _value, $Res Function(_Undefined) _then)
-      : super(_value, (v) => _then(v as _Undefined));
-
-  @override
-  _Undefined get _value => super._value as _Undefined;
-}
-
-/// @nodoc
-class _$_Undefined implements _Undefined {
-  const _$_Undefined();
-
-  @override
-  String toString() {
-    return 'UserProjection.undefined()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _Undefined);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult undefined(),
-    @required TResult basic(),
-    @required TResult custom(),
-    @required TResult full(),
-  }) {
-    assert(undefined != null);
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
-    return undefined();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult undefined(),
-    TResult basic(),
-    TResult custom(),
-    TResult full(),
-    @required TResult orElse(),
-  }) {
-    assert(orElse != null);
-    if (undefined != null) {
-      return undefined();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult undefined(_Undefined value),
-    @required TResult basic(_Basic value),
-    @required TResult custom(_Custom value),
-    @required TResult full(_Full value),
-  }) {
-    assert(undefined != null);
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
-    return undefined(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult undefined(_Undefined value),
-    TResult basic(_Basic value),
-    TResult custom(_Custom value),
-    TResult full(_Full value),
-    @required TResult orElse(),
-  }) {
-    assert(orElse != null);
-    if (undefined != null) {
-      return undefined(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Undefined implements UserProjection {
-  const factory _Undefined() = _$_Undefined;
 }
 
 /// @nodoc
@@ -226,12 +116,10 @@ class _$_Basic implements _Basic {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>({
-    @required TResult undefined(),
     @required TResult basic(),
     @required TResult custom(),
     @required TResult full(),
   }) {
-    assert(undefined != null);
     assert(basic != null);
     assert(custom != null);
     assert(full != null);
@@ -241,7 +129,6 @@ class _$_Basic implements _Basic {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>({
-    TResult undefined(),
     TResult basic(),
     TResult custom(),
     TResult full(),
@@ -257,12 +144,10 @@ class _$_Basic implements _Basic {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object>({
-    @required TResult undefined(_Undefined value),
     @required TResult basic(_Basic value),
     @required TResult custom(_Custom value),
     @required TResult full(_Full value),
   }) {
-    assert(undefined != null);
     assert(basic != null);
     assert(custom != null);
     assert(full != null);
@@ -272,7 +157,6 @@ class _$_Basic implements _Basic {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>({
-    TResult undefined(_Undefined value),
     TResult basic(_Basic value),
     TResult custom(_Custom value),
     TResult full(_Full value),
@@ -326,12 +210,10 @@ class _$_Custom implements _Custom {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>({
-    @required TResult undefined(),
     @required TResult basic(),
     @required TResult custom(),
     @required TResult full(),
   }) {
-    assert(undefined != null);
     assert(basic != null);
     assert(custom != null);
     assert(full != null);
@@ -341,7 +223,6 @@ class _$_Custom implements _Custom {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>({
-    TResult undefined(),
     TResult basic(),
     TResult custom(),
     TResult full(),
@@ -357,12 +238,10 @@ class _$_Custom implements _Custom {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object>({
-    @required TResult undefined(_Undefined value),
     @required TResult basic(_Basic value),
     @required TResult custom(_Custom value),
     @required TResult full(_Full value),
   }) {
-    assert(undefined != null);
     assert(basic != null);
     assert(custom != null);
     assert(full != null);
@@ -372,7 +251,6 @@ class _$_Custom implements _Custom {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>({
-    TResult undefined(_Undefined value),
     TResult basic(_Basic value),
     TResult custom(_Custom value),
     TResult full(_Full value),
@@ -426,12 +304,10 @@ class _$_Full implements _Full {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>({
-    @required TResult undefined(),
     @required TResult basic(),
     @required TResult custom(),
     @required TResult full(),
   }) {
-    assert(undefined != null);
     assert(basic != null);
     assert(custom != null);
     assert(full != null);
@@ -441,7 +317,6 @@ class _$_Full implements _Full {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>({
-    TResult undefined(),
     TResult basic(),
     TResult custom(),
     TResult full(),
@@ -457,12 +332,10 @@ class _$_Full implements _Full {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object>({
-    @required TResult undefined(_Undefined value),
     @required TResult basic(_Basic value),
     @required TResult custom(_Custom value),
     @required TResult full(_Full value),
   }) {
-    assert(undefined != null);
     assert(basic != null);
     assert(custom != null);
     assert(full != null);
@@ -472,7 +345,6 @@ class _$_Full implements _Full {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>({
-    TResult undefined(_Undefined value),
     TResult basic(_Basic value),
     TResult custom(_Custom value),
     TResult full(_Full value),

@@ -22,7 +22,7 @@ class CourseWorkMaterialAdapter extends TypeAdapter<CourseWorkMaterial> {
     resource.description = fields[5] as String;
     resource.creatorUserId = fields[6] as String;
     resource.id = fields[7] as String;
-    resource.materials = fields[8] as List<Material>;
+    resource.materials = (fields[8] as List)?.cast<Material>();
     resource.updateTime = fields[9] as String;
     resource.scheduledTime = fields[10] as String;
     resource.state = fields[11] as String;
@@ -72,7 +72,5 @@ class CourseWorkMaterialAdapter extends TypeAdapter<CourseWorkMaterial> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CourseWorkMaterialAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CourseWorkMaterialAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

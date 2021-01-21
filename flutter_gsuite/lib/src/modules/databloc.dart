@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:flutter_gsuite/src/constants/constants.dart';
 import 'package:observable_ish/observable_ish.dart';
 
 class DataBloc<T> {
@@ -20,6 +22,11 @@ class DataBloc<T> {
       final newValues = await _fetchMore();
       valueList.addAll([...newValues]);
     } catch (e) {
+      log(
+        'error',
+        name: logSrc(['dataBloc', 'fetchMore']),
+        error: e,
+      );
       rethrow;
     }
   }

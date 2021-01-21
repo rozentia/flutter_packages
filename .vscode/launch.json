@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "auth_module",
+            "cwd": "auth_module",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter_gsuite",
+            "cwd": "flutter_gsuite",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "rx_hive_cache",
+            "cwd": "rx_hive_cache",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "sfpro_iconset",
+            "cwd": "sfpro_iconset",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "shared_extensions",
+            "cwd": "shared_extensions",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
