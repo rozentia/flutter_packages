@@ -23,6 +23,7 @@ dependencies:
   googleapis_auth: ^0.2.12
   hive: ^1.4.4
   observable_ish: ^2.1.4
+  quiver: ^2.1.5
 
 dev_dependencies:
   flutter_test:

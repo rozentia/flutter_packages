@@ -14,6 +14,7 @@ export './models/classroom/common/date.adapter.dart';
 export './models/classroom/common/timeofday.adapter.dart';
 export './models/classroom/course/course.adapter.dart';
 export './models/classroom/course/course.extensions.dart';
+export './models/classroom/course_model/aggregated_coursework.dart';
 export './models/classroom/course_model/course_model.extensions.dart';
 export './models/classroom/course_model/course_model.m.dart';
 export './models/classroom/drive/drive_file.adapter.dart';
@@ -38,11 +39,9 @@ export './models/classroom/submission/submission_history.adapter.dart';
 export './models/classroom/work/course_work.adapter.dart';
 export './models/classroom/work/course_work_material.adapter.dart';
 export './models/classroom/work/multiple_choice_question.adapter.dart';
-
 export './models/conference/conference.m.dart';
 export './models/meet_event/attendee_data.m.dart';
 export './models/meet_event/meet_event.extensions.dart';
 export './models/meet_event/meet_event.m.dart';
-
 export './models/user/user.adapter.dart';
 export './models/user/user_name.adapter.dart';

@@ -4,10 +4,14 @@ import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:quiver/iterables.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/hive_constants.dart';
+import 'aggregated_coursework.dart';
 
 part 'course_model.m.g.dart';
+
+const noTopicKey = 'No Topic';
 
 @HiveType(typeId: TYPE_ID_COURSE_MODEL)
 class CourseModel extends HiveObject {
@@ -45,7 +49,49 @@ class CourseModel extends HiveObject {
     this.courseWorkSubmissions = const [],
   });
 
-  /// Retursn either the [data] provided or the resolved [dataFuture] or null if either is null
+  Map<String, List<AggregatedCourseWork>> get sortedAggregatedCourseWorks => topics.asMap().map(
+        (key, topic) => MapEntry(
+          topic.topicId,
+          courseWorks
+              .where((courseWork) => courseWork.topicId == topic.topicId)
+              .map<AggregatedCourseWork>(
+                (courseWork) => AggregatedCourseWork.fromCourseWork(
+                  topic,
+                  courseWork,
+                  courseWorkSubmissions,
+                ),
+              )
+              .toList(),
+        ),
+      );
+  Map<String, List<CourseWorkMaterial>> get sortedCourseWorkMaterials => topics.asMap().map((key, topic) => MapEntry(
+        topic.topicId,
+        courseWorkMaterials.where((material) => material.topicId == topic.topicId).toList(),
+      ));
+
+  /// Returns a map representation of the topics data where the keys are the topic name and
+  /// the value is a dynamic list holding either CourseWorkMaterial or AggregatedCourseWork
+  Map<String, List<dynamic>> get topicData => topics.asMap().map(
+        (key, topic) => MapEntry(
+            topic.name,
+            concat([
+              sortedAggregatedCourseWorks[topic.topicId] ?? [],
+              sortedCourseWorkMaterials[topic.topicId] ?? [],
+            ]).toList()),
+      )..addAll({
+          noTopicKey: concat([
+            courseWorks
+                .where((courseWork) => courseWork.topicId == null)
+                .map((courseWork) => AggregatedCourseWork.fromCourseWork(
+                      null,
+                      courseWork,
+                      courseWorkSubmissions,
+                    )),
+            courseWorkMaterials.where((material) => material.topicId == null),
+          ]).toList()
+        });
+
+  /// Returns either the [data] provided or the resolved [dataFuture] or null if either is null
   Future<T> _dataOr<T>(T data, Future<T> dataFuture) async {
     try {
       return data ?? (dataFuture != null ? await dataFuture : null);
