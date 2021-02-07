@@ -1,9 +1,8 @@
-import '../../models/conference/conference.m.dart';
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/admin/reports_v1.dart';
 
-import './meet_event.extensions.dart';
 import 'attendee_data.m.dart';
+import 'meet_event.extensions.dart';
 
 class MeetEvent {
   final String conferenceId;
@@ -17,11 +16,6 @@ class MeetEvent {
     @required this.organizerEmail,
     @required this.meetingCode,
   });
-
-  /// Optional field to store the conference claim's flamingo
-  /// document from firestore if meet event has already
-  /// been claimed and linked to an activity record
-  Conference conferenceClaim;
 
   /// List of all identifiers of teachers who attended
   List<String> get teachers => attended.filterKeys(
@@ -47,8 +41,7 @@ class MeetEvent {
     final List<AttendeeData> data = attended[identifier];
     return AttendeeData(
       end: data.map<DateTime>((d) => d.end).toList().latest,
-      duration:
-          data.fold(const Duration(), (prev, curr) => prev + curr.duration),
+      duration: data.fold(const Duration(), (prev, curr) => prev + curr.duration),
       identifier: data.first.identifier,
       identifierType: data.first.identifierType,
       isExternal: data.first.isExternal,
@@ -60,10 +53,7 @@ class MeetEvent {
   List<DateTime> get _callStartTimes => attended.entries
       .fold<List<DateTime>>(
         [],
-        (prev, curr) => [
-          ...prev,
-          ...curr.value.map<DateTime>((attendeeData) => attendeeData.start)
-        ],
+        (prev, curr) => [...prev, ...curr.value.map<DateTime>((attendeeData) => attendeeData.start)],
       )
       .uniques
       .cast<DateTime>();
@@ -79,16 +69,20 @@ class MeetEvent {
       .uniques
       .cast<DateTime>();
 
-  DateTime get start => _callStartTimes.earliest.toLocal();
-  DateTime get end => _callEndedTimes.latest.toLocal();
+  /// Calculated start time of the conference in UTC
+  DateTime get start => _callStartTimes.earliest.toUtc();
+
+  /// Calculated end time of the conference in UTC
+  DateTime get end => _callEndedTimes.latest.toUtc();
+
+  /// Total calculated duration of the conference
   Duration get duration => end.difference(start);
 
+  /// Add an [Activity] item to the [attended] map
   void addAttendee(Activity activity) {
     if (activity == null || activity.callEndedEvent == null) return;
 
-    final identifier = activity.callEndedEvent.identifier ??
-        activity.callEndedEvent.displayName ??
-        'unidentifiable';
+    final identifier = activity.callEndedEvent.identifier ?? activity.callEndedEvent.displayName ?? 'unidentifiable';
 
     if (!attended.containsKey(identifier)) {
       attended.addEntries([MapEntry(identifier, <AttendeeData>[])]);

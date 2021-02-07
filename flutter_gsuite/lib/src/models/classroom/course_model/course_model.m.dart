@@ -49,6 +49,9 @@ class CourseModel extends HiveObject {
     this.courseWorkSubmissions = const [],
   });
 
+  /// The id of the course this model referes to or null if the model is empty
+  String get courseId => course?.id;
+
   Map<String, List<AggregatedCourseWork>> get sortedAggregatedCourseWorks => topics.asMap().map(
         (key, topic) => MapEntry(
           topic.topicId,
@@ -90,6 +93,23 @@ class CourseModel extends HiveObject {
             courseWorkMaterials.where((material) => material.topicId == null),
           ]).toList()
         });
+
+  /// Return a user by its [userIdOrEmailOrFullName] or null if not found
+  UserProfile findRosterUser(String userIdOrEmailOrFullName,
+          {bool excludeStudents = false, bool excludeTeachers = true}) =>
+      !excludeStudents && !excludeTeachers
+          ? null
+          : concat([if (!excludeTeachers) teachers, if (!excludeStudents) students]).firstWhere(
+              (user) =>
+                  user.id == userIdOrEmailOrFullName ||
+                  user.emailAddress == userIdOrEmailOrFullName ||
+                  user.name.fullName == userIdOrEmailOrFullName,
+              orElse: () => null);
+
+  Topic findCourseTopic(String topicIdOrName) => topics.firstWhere(
+        (topic) => topic.topicId == topicIdOrName || topic.name == topicIdOrName,
+        orElse: () => null,
+      );
 
   /// Returns either the [data] provided or the resolved [dataFuture] or null if either is null
   Future<T> _dataOr<T>(T data, Future<T> dataFuture) async {
@@ -159,6 +179,17 @@ class CourseModel extends HiveObject {
     final data = await _dataOr(input, future);
     if (data != null) {
       courseWorkMaterials = data;
+      await save();
+    }
+  }
+
+  Future<void> updateCourseworkSubmission({
+    List<StudentSubmission> input,
+    Future<List<StudentSubmission>> future,
+  }) async {
+    final data = await _dataOr(input, future);
+    if (data != null) {
+      courseWorkSubmissions = data;
       await save();
     }
   }

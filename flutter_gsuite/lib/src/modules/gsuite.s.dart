@@ -695,6 +695,7 @@ class GsuiteService {
         // ignore activity items without callEndedEvent.conferenceId
         if (activity.callEndedEvent == null || activity.callEndedEvent.conferenceId == null) continue;
 
+        // find activity's related MeetEvent
         int index = conferences.indexWhere(
           (conference) => conference.conferenceId == activity.callEndedEvent.conferenceId,
         );
@@ -707,17 +708,18 @@ class GsuiteService {
             organizerEmail: activity.callEndedEvent.organizerEmail,
             meetingCode: activity.callEndedEvent.meetingCode,
           ));
+          // set index to last item's index
           index = conferences.length - 1;
         }
-
+        // add the activity data to the related MeetEvent
         conferences[index].addAttendee(activity);
       }
 
-      //= Filter by userId attended
+      // Filter by userId
       if (userId != null) {
         return conferences.where((conference) => conference.attended.containsKey(userId)).toList();
       }
-
+      // If no userId provided just return all fetched conferences
       return conferences;
     } catch (e) {
       _logErr('getMeetReport', e);

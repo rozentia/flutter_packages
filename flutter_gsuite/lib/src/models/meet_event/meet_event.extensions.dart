@@ -1,52 +1,48 @@
-import 'package:flamingo/flamingo.dart';
 import 'package:googleapis/admin/reports_v1.dart';
 import 'package:shared_extensions/shared_extensions.dart';
 
-import '../conference/conference.m.dart';
 import 'meet_event.m.dart';
 
 extension ExtendedMeetEvents on List<MeetEvent> {
-  Future<List<MeetEvent>> checkForClaims() async {
-    final conferenceIdQueries = toSet()
-        .map<String>((meetEvent) => meetEvent.conferenceId)
-        .toList()
-        .chunk(10) //= divide in chunks of 10 or fit whereIn query
-        .map<Future<List<Conference>>>(
-            (conferenceIdChunk) => CollectionPaging<Conference>(
-                  query: Conference().collectionRef.where(
-                        Conference.fnConferenceId,
-                        whereIn: conferenceIdChunk,
-                      ),
-                  limit: 100,
-                  decode: (snap) => Conference(snapshot: snap),
-                ).load());
+  // Future<List<MeetEvent>> checkForClaims() async {
+  //   final conferenceIdQueries = toSet()
+  //       .map<String>((meetEvent) => meetEvent.conferenceId)
+  //       .toList()
+  //       .chunk(10) //= divide in chunks of 10 or fit whereIn query
+  //       .map<Future<List<Conference>>>((conferenceIdChunk) => CollectionPaging<Conference>(
+  //             query: Conference().collectionRef.where(
+  //                   Conference.fnConferenceId,
+  //                   whereIn: conferenceIdChunk,
+  //                 ),
+  //             limit: 100,
+  //             decode: (snap) => Conference(snapshot: snap),
+  //           ).load());
 
-    final queryResponses = await Future.wait(conferenceIdQueries);
+  //   final queryResponses = await Future.wait(conferenceIdQueries);
 
-    final claimedConferences = queryResponses.fold<List<Conference>>(
-      [],
-      (prev, conferences) => [
-        ...prev,
-        if (conferences != null && conferences.isNotEmpty) ...conferences,
-      ],
-    );
+  //   final claimedConferences = queryResponses.fold<List<Conference>>(
+  //     [],
+  //     (prev, conferences) => [
+  //       ...prev,
+  //       if (conferences != null && conferences.isNotEmpty) ...conferences,
+  //     ],
+  //   );
 
-    if (claimedConferences == null || claimedConferences.isEmpty) {
-      return this;
-    } else {
-      return map<MeetEvent>((meetEvent) {
-        final matchingClaim = claimedConferences.firstWhere(
-          (conference) => meetEvent.conferenceId == conference.conferenceId,
-          orElse: () => null,
-        );
-        return matchingClaim == null ? meetEvent : meetEvent
-          ..conferenceClaim = matchingClaim;
-      }).toList();
-    }
-  }
+  //   if (claimedConferences == null || claimedConferences.isEmpty) {
+  //     return this;
+  //   } else {
+  //     return map<MeetEvent>((meetEvent) {
+  //       final matchingClaim = claimedConferences.firstWhere(
+  //         (conference) => meetEvent.conferenceId == conference.conferenceId,
+  //         orElse: () => null,
+  //       );
+  //       return matchingClaim == null ? meetEvent : meetEvent
+  //         ..conferenceClaim = matchingClaim;
+  //     }).toList();
+  //   }
+  // }
 
-  Map<DateTime, List<MeetEvent>> get asTableCalendarEvents =>
-      fold<Map<DateTime, List<MeetEvent>>>(
+  Map<DateTime, List<MeetEvent>> get asTableCalendarEvents => fold<Map<DateTime, List<MeetEvent>>>(
         {},
         (prev, curr) => prev
           ..update(
@@ -66,8 +62,7 @@ extension ActivityMeetEvents on Activity {
 }
 
 extension ActivityEventsParameterGetter on ActivityEvents {
-  String _getParameter(String name) =>
-      parameters.firstWhere((p) => p.name == name, orElse: () => null)?.value;
+  String _getParameter(String name) => parameters.firstWhere((p) => p.name == name, orElse: () => null)?.value;
   String get conferenceId => _getParameter('conference_id');
   String get organizerEmail => _getParameter('organizer_email');
   String get displayName => _getParameter('display_name');
@@ -76,9 +71,7 @@ extension ActivityEventsParameterGetter on ActivityEvents {
   String get identifierType => _getParameter('identifier_type');
   String get locationCountry => _getParameter('location_country');
   String get locationRegion => _getParameter('location_region');
-  bool get isExternal => parameters
-      .firstWhere((p) => p.name == 'is_external', orElse: () => null)
-      ?.boolValue;
+  bool get isExternal => parameters.firstWhere((p) => p.name == 'is_external', orElse: () => null)?.boolValue;
   Duration get duration => Duration(
         seconds: int.tryParse((parameters ?? [])
                     .firstWhere(
@@ -102,8 +95,7 @@ extension MapIds on Map<String, dynamic> {
       keys
           .fold<List<String>>(
             [],
-            (prev, curr) =>
-                curr.contains(pattern) ? [...prev, curr] : [...prev],
+            (prev, curr) => curr.contains(pattern) ? [...prev, curr] : [...prev],
           )
           .toSet()
           .toList() ??
