@@ -234,7 +234,7 @@ class GsuiteService {
     try {
       _checkApi(_superAdminApi);
       final groups = await _superAdminApi.groups.list(userKey: userId);
-      return groups?.groups;
+      return groups?.groups ?? [];
     } catch (e) {
       _logErr('fetchUserGroup', e);
       rethrow;
@@ -484,8 +484,10 @@ class GsuiteService {
       final coursesTeaching = await fetchUserTeachingCourses();
       final coursesEnrolled = await fetchUserEnrolledCourses();
       final models = [
-        ...coursesTeaching.map((course) => CourseModel(course: course, isTeacher: true, userId: _userEmail)),
-        ...coursesEnrolled.map((course) => CourseModel(course: course, isTeacher: false, userId: _userEmail)),
+        if (coursesTeaching != null)
+          ...coursesTeaching.map((course) => CourseModel(course: course, isTeacher: true, userId: _userEmail)),
+        if (coursesEnrolled != null)
+          ...coursesEnrolled.map((course) => CourseModel(course: course, isTeacher: false, userId: _userEmail)),
       ];
 
       //! Removed in favour of CourseModel fetching the roster itself upon request
@@ -505,8 +507,11 @@ class GsuiteService {
       final models = await futureGroup.future;
       */
 
-      _logMsg('resolved ${coursesTeaching.length + coursesEnrolled.length} CourseModels', 'fetchUserCourseModels');
-      return models.asMap().map((key, courseModel) => MapEntry(courseModel.course.id, courseModel));
+      _logMsg('resolved ${(coursesTeaching?.length ?? 0) + (coursesEnrolled?.length ?? 0)} CourseModels',
+          'fetchUserCourseModels');
+      return models?.isNotEmpty != true
+          ? {}
+          : models.asMap().map((key, courseModel) => MapEntry(courseModel.course.id, courseModel));
     } catch (e) {
       _logErr('fetchUsercourseModels', e);
       rethrow;
@@ -657,6 +662,30 @@ class GsuiteService {
       rethrow;
     }
   }
+
+  /// Returns a list of invitations that the requesting user is permitted to view
+  Future<List<Invitation>> fetchUserInvitations() async {
+    try {
+      _checkApi(_classroomApi);
+      final response = await _classroomApi.invitations.list(userId: 'me');
+      return response.invitations;
+    } catch (e) {
+      _logErr('fetchUserInvitations', e);
+      rethrow;
+    }
+  }
+
+  Future<bool> acceptInvitation(String invitationId) async {
+    try {
+      _checkApi(_classroomApi);
+      final Empty response = await _classroomApi.invitations.accept(invitationId);
+      return response is Empty;
+    } catch (e) {
+      _logErr('acceptInvitation', e);
+      rethrow;
+    }
+  }
+
   //-                                                                              REPORTS
 
   /// Returns a list of google meet conference events for the specified [start]

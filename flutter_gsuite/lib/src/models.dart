@@ -39,7 +39,6 @@ export './models/classroom/submission/submission_history.adapter.dart';
 export './models/classroom/work/course_work.adapter.dart';
 export './models/classroom/work/course_work_material.adapter.dart';
 export './models/classroom/work/multiple_choice_question.adapter.dart';
-export './models/conference/conference.m.dart';
 export './models/meet_event/attendee_data.m.dart';
 export './models/meet_event/meet_event.extensions.dart';
 export './models/meet_event/meet_event.m.dart';

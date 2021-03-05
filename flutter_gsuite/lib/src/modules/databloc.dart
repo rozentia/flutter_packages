@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_gsuite/src/constants/constants.dart';
-import 'package:observable_ish/observable_ish.dart';
 
 class DataBloc<T> {
   T dataType;
-  final RxList<T> valueList;
+  final List<T> valueList;
   Set<T> get valueSet => valueList.toSet();
   final FutureOr<Iterable<T>> Function() _fetchMore;
 
@@ -14,7 +13,7 @@ class DataBloc<T> {
     Iterable<T> initialData = const [],
     FutureOr<List<T>> Function() fetchMore,
   })  : _fetchMore = fetchMore,
-        valueList = RxList<T>()..addAll(initialData);
+        valueList = initialData?.toList() ?? [];
 
   Future<void> fetchMore() async {
     if (_fetchMore == null) return;

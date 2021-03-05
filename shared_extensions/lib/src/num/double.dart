@@ -15,13 +15,5 @@ extension SharedExtensionsDouble on double {
     /// The highest value in the target range.
     double targetHigh,
   ) =>
-      baseLow == null ||
-              baseHigh == null ||
-              targetLow == null ||
-              targetHigh == null
-          ? 0.0
-          : (toDouble() - baseLow) /
-                  (baseHigh - baseLow) *
-                  (targetHigh - targetLow) +
-              targetLow;
+      (toDouble() - baseLow) / (baseHigh - baseLow) * (targetHigh - targetLow) + targetLow;
 }
