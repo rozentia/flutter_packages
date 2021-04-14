@@ -14,10 +14,10 @@ class MaterialAdapter extends TypeAdapter<Material> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Material();
-    resource.driveFile = fields[0] as SharedDriveFile;
-    resource.form = fields[1] as Form;
-    resource.link = fields[2] as Link;
-    resource.youtubeVideo = fields[3] as YouTubeVideo;
+    resource.driveFile = fields[0] as SharedDriveFile?;
+    resource.form = fields[1] as Form?;
+    resource.link = fields[2] as Link?;
+    resource.youtubeVideo = fields[3] as YouTubeVideo?;
     return resource;
   }
 

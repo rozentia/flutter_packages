@@ -14,7 +14,7 @@ class AssignmentAdapter extends TypeAdapter<Assignment> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Assignment();
-    resource.studentWorkFolder = fields[0] as DriveFolder;
+    resource.studentWorkFolder = fields[0] as DriveFolder?;
     return resource;
   }
 

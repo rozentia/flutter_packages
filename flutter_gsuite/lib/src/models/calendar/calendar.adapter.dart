@@ -14,19 +14,19 @@ class CalendarListEntryAdapter extends TypeAdapter<CalendarListEntry> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = CalendarListEntry();
-    resource.accessRole = fields[0] as String;
-    resource.backgroundColor = fields[1] as String;
-    resource.colorId = fields[2] as String;
-    resource.deleted = fields[3] as bool;
-    resource.description = fields[4] as String;
-    resource.foregroundColor = fields[5] as String;
-    resource.hidden = fields[6] as bool;
-    resource.id = fields[7] as String;
-    resource.location = fields[8] as String;
-    resource.primary = fields[9] as bool;
-    resource.summary = fields[10] as String;
-    resource.summaryOverride = fields[11] as String;
-    resource.timeZone = fields[12] as String;
+    resource.accessRole = fields[0] as String?;
+    resource.backgroundColor = fields[1] as String?;
+    resource.colorId = fields[2] as String?;
+    resource.deleted = fields[3] as bool?;
+    resource.description = fields[4] as String?;
+    resource.foregroundColor = fields[5] as String?;
+    resource.hidden = fields[6] as bool?;
+    resource.id = fields[7] as String?;
+    resource.location = fields[8] as String?;
+    resource.primary = fields[9] as bool?;
+    resource.summary = fields[10] as String?;
+    resource.summaryOverride = fields[11] as String?;
+    resource.timeZone = fields[12] as String?;
     return resource;
   }
 

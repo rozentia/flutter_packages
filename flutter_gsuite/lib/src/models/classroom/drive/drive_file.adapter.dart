@@ -13,10 +13,10 @@ class DriveFileAdapter extends TypeAdapter<DriveFile> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = DriveFile();
-    resource.alternateLink = fields[0] as String;
-    resource.id = fields[1] as String;
-    resource.thumbnailUrl = fields[2] as String;
-    resource.title = fields[3] as String;
+    resource.alternateLink = fields[0] as String?;
+    resource.id = fields[1] as String?;
+    resource.thumbnailUrl = fields[2] as String?;
+    resource.title = fields[3] as String?;
     return resource;
   }
 

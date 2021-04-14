@@ -14,10 +14,10 @@ class TopicAdapter extends TypeAdapter<Topic> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Topic();
-    resource.courseId = fields[0] as String;
-    resource.topicId = fields[1] as String;
-    resource.name = fields[2] as String;
-    resource.updateTime = fields[3] as String;
+    resource.courseId = fields[0] as String?;
+    resource.topicId = fields[1] as String?;
+    resource.name = fields[2] as String?;
+    resource.updateTime = fields[3] as String?;
 
     return resource;
   }

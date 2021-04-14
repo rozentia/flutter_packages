@@ -14,7 +14,7 @@ class MultipleChoiceSubmissionAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = MultipleChoiceSubmission();
-    resource.answer = fields[0] as String;
+    resource.answer = fields[0] as String?;
 
     return resource;
   }

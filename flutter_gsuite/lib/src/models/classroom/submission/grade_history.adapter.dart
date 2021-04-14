@@ -13,11 +13,11 @@ class GradeHistoryAdapter extends TypeAdapter<GradeHistory> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = GradeHistory();
-    resource.actorUserId = fields[0] as String;
-    resource.gradeChangeType = fields[1] as String;
-    resource.gradeTimestamp = fields[2] as String;
-    resource.maxPoints = fields[3] as double;
-    resource.pointsEarned = fields[4] as double;
+    resource.actorUserId = fields[0] as String?;
+    resource.gradeChangeType = fields[1] as String?;
+    resource.gradeTimestamp = fields[2] as String?;
+    resource.maxPoints = fields[3] as double?;
+    resource.pointsEarned = fields[4] as double?;
 
     return resource;
   }

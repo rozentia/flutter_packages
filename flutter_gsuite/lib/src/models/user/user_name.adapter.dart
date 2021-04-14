@@ -14,9 +14,9 @@ class UserNameAdapter extends TypeAdapter<UserName> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final Map<dynamic, dynamic> json = {
-      'familyName': fields[0] as String,
-      'fullName': fields[1] as String,
-      'givenName': fields[2] as String,
+      'familyName': fields[0] as String?,
+      'fullName': fields[1] as String?,
+      'givenName': fields[2] as String?,
     };
     return UserName.fromJson(json);
   }
@@ -26,11 +26,11 @@ class UserNameAdapter extends TypeAdapter<UserName> {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write<String>(obj.familyName)
+      ..write<String?>(obj.familyName)
       ..writeByte(1)
-      ..write<String>(obj.fullName)
+      ..write<String?>(obj.fullName)
       ..writeByte(2)
-      ..write<String>(obj.givenName);
+      ..write<String?>(obj.givenName);
   }
 
   @override

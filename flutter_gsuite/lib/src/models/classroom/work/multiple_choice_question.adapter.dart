@@ -14,7 +14,7 @@ class MultipleChoiceQuestionAdapter extends TypeAdapter<MultipleChoiceQuestion> 
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = MultipleChoiceQuestion();
-    resource.choices = (fields[0] as List)?.cast<String>();
+    resource.choices = (fields[0] as List?)?.cast<String>();
 
     return resource;
   }

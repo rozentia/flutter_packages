@@ -2,7 +2,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:googleapis/admin/directory_v1.dart';
-import 'package:googleapis/admin/reports_v1.dart' as report;
+import 'package:googleapis/admin/reports_v1.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';
 
@@ -12,34 +12,34 @@ String logSrc(List<String> source) => '$module_name::${source.join('.')}';
 
 const List<String> SCOPES = [
   //= Calendar
-  CalendarApi.CalendarScope,
-  CalendarApi.CalendarEventsScope,
+  CalendarApi.calendarScope,
+  CalendarApi.calendarEventsScope,
   //= Classroom
-  ClassroomApi.ClassroomAnnouncementsScope,
-  ClassroomApi.ClassroomCoursesScope,
-  ClassroomApi.ClassroomCourseworkMeScope,
-  ClassroomApi.ClassroomCourseworkStudentsScope,
-  ClassroomApi.ClassroomRostersScope,
-  ClassroomApi.ClassroomTopicsScope,
-  ClassroomApi.ClassroomPushNotificationsScope,
+  ClassroomApi.classroomAnnouncementsScope,
+  ClassroomApi.classroomCoursesScope,
+  ClassroomApi.classroomCourseworkMeScope,
+  ClassroomApi.classroomCourseworkStudentsScope,
+  ClassroomApi.classroomRostersScope,
+  ClassroomApi.classroomTopicsScope,
+  ClassroomApi.classroomPushNotificationsScope,
 
   /// THE FOLLOWING SCOPES NEEDS APP VERIFICATION BY GOOGLE
   /// bear in mind that process takes time...
-  ClassroomApi.ClassroomCourseworkmaterialsScope,
-  ClassroomApi.ClassroomProfileEmailsScope,
-  ClassroomApi.ClassroomProfilePhotosScope,
-  ClassroomApi.ClassroomStudentSubmissionsMeReadonlyScope,
-  ClassroomApi.ClassroomStudentSubmissionsStudentsReadonlyScope,
+  ClassroomApi.classroomCourseworkmaterialsScope,
+  ClassroomApi.classroomProfileEmailsScope,
+  ClassroomApi.classroomProfilePhotosScope,
+  ClassroomApi.classroomStudentSubmissionsMeReadonlyScope,
+  ClassroomApi.classroomStudentSubmissionsStudentsReadonlyScope,
 ];
 
 const List<String> ADMIN_SCOPES = [
   ...SCOPES,
   //= Admin Directory
-  AdminApi.AdminDirectoryUserScope,
-  AdminApi.AdminDirectoryGroupMemberScope,
-  AdminApi.AdminDirectoryGroupScope,
+  DirectoryApi.adminDirectoryUserScope,
+  DirectoryApi.adminDirectoryGroupMemberScope,
+  DirectoryApi.adminDirectoryGroupScope,
   //= Admin Reports
-  report.AdminApi.AdminReportsAuditReadonlyScope
+  ReportsApi.adminReportsAuditReadonlyScope
 ];
 
 /*

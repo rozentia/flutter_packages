@@ -14,9 +14,9 @@ class DriveFolderAdapter extends TypeAdapter<DriveFolder> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = DriveFolder();
-    resource.alternateLink = fields[0] as String;
-    resource.id = fields[1] as String;
-    resource.title = fields[2] as String;
+    resource.alternateLink = fields[0] as String?;
+    resource.id = fields[1] as String?;
+    resource.title = fields[2] as String?;
     return resource;
   }
 

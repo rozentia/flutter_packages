@@ -14,8 +14,8 @@ class SubmissionHistoryAdapter extends TypeAdapter<SubmissionHistory> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = SubmissionHistory();
-    resource.gradeHistory = fields[0] as GradeHistory;
-    resource.stateHistory = fields[1] as StateHistory;
+    resource.gradeHistory = fields[0] as GradeHistory?;
+    resource.stateHistory = fields[1] as StateHistory?;
 
     return resource;
   }

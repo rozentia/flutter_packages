@@ -14,9 +14,9 @@ class EventDateTimeAdapter extends TypeAdapter<EventDateTime> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = EventDateTime();
-    resource.date = fields[0] as DateTime;
-    resource.dateTime = fields[1] as DateTime;
-    resource.timeZone = fields[2] as String;
+    resource.date = fields[0] as DateTime?;
+    resource.dateTime = fields[1] as DateTime?;
+    resource.timeZone = fields[2] as String?;
 
     return resource;
   }

@@ -14,10 +14,10 @@ class EventCreatorAdapter extends TypeAdapter<EventCreator> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = EventCreator();
-    resource.displayName = fields[0] as String;
-    resource.email = fields[1] as String;
-    resource.id = fields[2] as String;
-    resource.self = fields[3] as bool;
+    resource.displayName = fields[0] as String?;
+    resource.email = fields[1] as String?;
+    resource.id = fields[2] as String?;
+    resource.self = fields[3] as bool?;
 
     return resource;
   }

@@ -14,10 +14,10 @@ class TimeOfDayAdapter extends TypeAdapter<TimeOfDay> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = TimeOfDay();
-    resource.hours = fields[0] as int;
-    resource.minutes = fields[1] as int;
-    resource.nanos = fields[2] as int;
-    resource.seconds = fields[3] as int;
+    resource.hours = fields[0] as int?;
+    resource.minutes = fields[1] as int?;
+    resource.nanos = fields[2] as int?;
+    resource.seconds = fields[3] as int?;
 
     return resource;
   }

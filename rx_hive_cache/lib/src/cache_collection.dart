@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:observable_ish/observable_ish.dart';
 
@@ -15,19 +14,15 @@ class CacheCollection<T, F> {
   Iterable<T> get value => rxValue.value;
 
   CacheCollection._({
-    @required Box<T> box,
-    @required Future<Map<dynamic, T>> Function() fetchAll,
-    @required Future<T> Function(F id) fetchSingle,
-    @required bool Function(T current, T fetched) compare,
-  })  : assert(box != null),
-        assert(fetchAll != null),
-        assert(fetchSingle != null),
-        assert(compare != null),
-        _box = box,
+    required Box<T> box,
+    required Future<Map<dynamic, T>> Function() fetchAll,
+    required Future<T> Function(F id) fetchSingle,
+    required bool Function(T current, T fetched) compare,
+  })   : _box = box,
         _fetchAll = fetchAll,
         _fetchSingle = fetchSingle,
         _compare = compare,
-        rxValue = RxValue<Iterable<T>>() {
+        rxValue = RxValue<Iterable<T>>([]) {
     _updateRxValue();
     _box.watch().listen((_) => _updateRxValue());
   }
@@ -38,14 +33,14 @@ class CacheCollection<T, F> {
   /// If [cipher] is provided, the box will be cipher protected.\
   /// The [compare] function will be user to determine synchronization with cached values.\
   static Future<CacheCollection<K, S>> register<K, S>({
-    @required String boxName,
-    @required TypeAdapter<K> adapter,
-    @required Future<Map<dynamic, K>> Function() fetchAll,
-    @required Future<K> Function(S id) fetchSingle,
-    @required bool Function(K current, K fetched) compare,
-    HiveCipher cipher,
-    K defaultValue,
-    HiveInterface hiveInterface,
+    required String boxName,
+    required TypeAdapter<K> adapter,
+    required Future<Map<dynamic, K>> Function() fetchAll,
+    required Future<K> Function(S id) fetchSingle,
+    required bool Function(K current, K fetched) compare,
+    HiveCipher? cipher,
+    K? defaultValue,
+    HiveInterface? hiveInterface,
   }) async {
     final HiveInterface hive = hiveInterface ?? Hive;
     if (!hive.isAdapterRegistered(adapter.typeId)) {

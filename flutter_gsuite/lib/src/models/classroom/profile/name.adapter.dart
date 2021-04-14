@@ -14,9 +14,9 @@ class NameAdapter extends TypeAdapter<Name> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final name = Name();
-    name.familyName = fields[0] as String;
-    name.fullName = fields[1] as String;
-    name.givenName = fields[2] as String;
+    name.familyName = fields[0] as String?;
+    name.fullName = fields[1] as String?;
+    name.givenName = fields[2] as String?;
     return name;
   }
 
@@ -25,11 +25,11 @@ class NameAdapter extends TypeAdapter<Name> {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write<String>(obj.familyName)
+      ..write<String?>(obj.familyName)
       ..writeByte(1)
-      ..write<String>(obj.fullName)
+      ..write<String?>(obj.fullName)
       ..writeByte(2)
-      ..write<String>(obj.givenName);
+      ..write<String?>(obj.givenName);
   }
 
   @override

@@ -13,9 +13,9 @@ class LinkMaterialAdapter extends TypeAdapter<Link> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Link();
-    resource.thumbnailUrl = fields[0] as String;
-    resource.title = fields[1] as String;
-    resource.url = fields[2] as String;
+    resource.thumbnailUrl = fields[0] as String?;
+    resource.title = fields[1] as String?;
+    resource.url = fields[2] as String?;
     return resource;
   }
 

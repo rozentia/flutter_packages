@@ -14,25 +14,25 @@ class EventAdapter extends TypeAdapter<Event> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Event();
-    resource.colorId = fields[0] as String;
-    resource.created = fields[1] as DateTime;
-    resource.creator = fields[2] as EventCreator;
-    resource.description = fields[3] as String;
-    resource.end = fields[4] as EventDateTime;
-    resource.endTimeUnspecified = fields[5] as bool;
-    resource.hangoutLink = fields[6] as String;
-    resource.htmlLink = fields[7] as String;
-    resource.id = fields[8] as String;
-    resource.location = fields[9] as String;
-    resource.originalStartTime = fields[10] as EventDateTime;
-    resource.recurrence = (fields[11] as List)?.cast<String>();
-    resource.recurringEventId = fields[12] as String;
-    resource.start = fields[13] as EventDateTime;
-    resource.status = fields[14] as String;
-    resource.summary = fields[15] as String;
-    resource.transparency = fields[16] as String;
-    resource.updated = fields[17] as DateTime;
-    resource.visibility = fields[18] as String;
+    resource.colorId = fields[0] as String?;
+    resource.created = fields[1] as DateTime?;
+    resource.creator = fields[2] as EventCreator?;
+    resource.description = fields[3] as String?;
+    resource.end = fields[4] as EventDateTime?;
+    resource.endTimeUnspecified = fields[5] as bool?;
+    resource.hangoutLink = fields[6] as String?;
+    resource.htmlLink = fields[7] as String?;
+    resource.id = fields[8] as String?;
+    resource.location = fields[9] as String?;
+    resource.originalStartTime = fields[10] as EventDateTime?;
+    resource.recurrence = (fields[11] as List?)?.cast<String>();
+    resource.recurringEventId = fields[12] as String?;
+    resource.start = fields[13] as EventDateTime?;
+    resource.status = fields[14] as String?;
+    resource.summary = fields[15] as String?;
+    resource.transparency = fields[16] as String?;
+    resource.updated = fields[17] as DateTime?;
+    resource.visibility = fields[18] as String?;
     return resource;
   }
 

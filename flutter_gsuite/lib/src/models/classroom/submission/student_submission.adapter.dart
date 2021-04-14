@@ -14,23 +14,23 @@ class StudentSubmissionAdapter extends TypeAdapter<StudentSubmission> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = StudentSubmission();
-    resource.alternateLink = fields[0] as String;
-    resource.assignedGrade = fields[1] as double;
-    resource.assignmentSubmission = fields[2] as AssignmentSubmission;
-    resource.associatedWithDeveloper = fields[3] as bool;
-    resource.creationTime = fields[4] as String;
-    resource.courseId = fields[5] as String;
-    resource.courseWorkId = fields[6] as String;
-    resource.id = fields[7] as String;
-    resource.courseWorkType = fields[8] as String;
-    resource.late = fields[9] as bool;
-    resource.draftGrade = fields[10] as double;
-    resource.updateTime = fields[11] as String;
-    resource.multipleChoiceSubmission = fields[12] as MultipleChoiceSubmission;
-    resource.shortAnswerSubmission = fields[13] as ShortAnswerSubmission;
-    resource.state = fields[14] as String;
-    resource.submissionHistory = (fields[15] as List)?.cast<SubmissionHistory>();
-    resource.userId = fields[16] as String;
+    resource.alternateLink = fields[0] as String?;
+    resource.assignedGrade = fields[1] as double?;
+    resource.assignmentSubmission = fields[2] as AssignmentSubmission?;
+    resource.associatedWithDeveloper = fields[3] as bool?;
+    resource.creationTime = fields[4] as String?;
+    resource.courseId = fields[5] as String?;
+    resource.courseWorkId = fields[6] as String?;
+    resource.id = fields[7] as String?;
+    resource.courseWorkType = fields[8] as String?;
+    resource.late = fields[9] as bool?;
+    resource.draftGrade = fields[10] as double?;
+    resource.updateTime = fields[11] as String?;
+    resource.multipleChoiceSubmission = fields[12] as MultipleChoiceSubmission?;
+    resource.shortAnswerSubmission = fields[13] as ShortAnswerSubmission?;
+    resource.state = fields[14] as String?;
+    resource.submissionHistory = (fields[15] as List?)?.cast<SubmissionHistory>();
+    resource.userId = fields[16] as String?;
 
     return resource;
   }

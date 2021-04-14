@@ -9,12 +9,12 @@ part 'calendar_event.m.g.dart';
 @HiveType(typeId: TYPE_ID_CALENDAR_EVENT)
 class CalendarEvent {
   @HiveField(0)
-  final String calendarId;
+  final String? calendarId;
   @HiveField(1)
-  final Event event;
+  final Event? event;
 
   CalendarEvent({
-    @required this.calendarId,
-    @required this.event,
+    required this.calendarId,
+    required this.event,
   });
 }

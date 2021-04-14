@@ -14,27 +14,27 @@ class CourseWorkAdapter extends TypeAdapter<CourseWork> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = CourseWork();
-    resource.alternateLink = fields[0] as String;
-    resource.assigneeMode = fields[1] as String;
-    resource.assignment = fields[2] as Assignment;
-    resource.associatedWithDeveloper = fields[3] as bool;
-    resource.creationTime = fields[4] as String;
-    resource.description = fields[5] as String;
-    resource.creatorUserId = fields[6] as String;
-    resource.id = fields[7] as String;
-    resource.dueDate = fields[8] as Date;
-    resource.dueTime = fields[9] as TimeOfDay;
-    resource.individualStudentsOptions = fields[10] as IndividualStudentsOptions;
-    resource.materials = (fields[11] as List)?.cast<Material>();
-    resource.maxPoints = fields[12] as double;
-    resource.updateTime = fields[13] as String;
-    resource.multipleChoiceQuestion = fields[14] as MultipleChoiceQuestion;
-    resource.scheduledTime = fields[15] as String;
-    resource.state = fields[16] as String;
-    resource.submissionModificationMode = fields[17] as String;
-    resource.title = fields[18] as String;
-    resource.topicId = fields[19] as String;
-    resource.workType = fields[20] as String;
+    resource.alternateLink = fields[0] as String?;
+    resource.assigneeMode = fields[1] as String?;
+    resource.assignment = fields[2] as Assignment?;
+    resource.associatedWithDeveloper = fields[3] as bool?;
+    resource.creationTime = fields[4] as String?;
+    resource.description = fields[5] as String?;
+    resource.creatorUserId = fields[6] as String?;
+    resource.id = fields[7] as String?;
+    resource.dueDate = fields[8] as Date?;
+    resource.dueTime = fields[9] as TimeOfDay?;
+    resource.individualStudentsOptions = fields[10] as IndividualStudentsOptions?;
+    resource.materials = (fields[11] as List?)?.cast<Material>();
+    resource.maxPoints = fields[12] as double?;
+    resource.updateTime = fields[13] as String?;
+    resource.multipleChoiceQuestion = fields[14] as MultipleChoiceQuestion?;
+    resource.scheduledTime = fields[15] as String?;
+    resource.state = fields[16] as String?;
+    resource.submissionModificationMode = fields[17] as String?;
+    resource.title = fields[18] as String?;
+    resource.topicId = fields[19] as String?;
+    resource.workType = fields[20] as String?;
 
     return resource;
   }

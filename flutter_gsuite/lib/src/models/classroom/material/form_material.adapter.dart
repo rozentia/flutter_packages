@@ -13,10 +13,10 @@ class FormMaterialAdapter extends TypeAdapter<Form> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Form();
-    resource.formUrl = fields[0] as String;
-    resource.responseUrl = fields[1] as String;
-    resource.thumbnailUrl = fields[2] as String;
-    resource.title = fields[3] as String;
+    resource.formUrl = fields[0] as String?;
+    resource.responseUrl = fields[1] as String?;
+    resource.thumbnailUrl = fields[2] as String?;
+    resource.title = fields[3] as String?;
 
     return resource;
   }

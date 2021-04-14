@@ -13,10 +13,10 @@ class YouTubeVideoMaterialAdapter extends TypeAdapter<YouTubeVideo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final course = YouTubeVideo();
-    course.alternateLink = fields[0] as String;
-    course.id = fields[1] as String;
-    course.thumbnailUrl = fields[2] as String;
-    course.title = fields[3] as String;
+    course.alternateLink = fields[0] as String?;
+    course.id = fields[1] as String?;
+    course.thumbnailUrl = fields[2] as String?;
+    course.title = fields[3] as String?;
     return course;
   }
 

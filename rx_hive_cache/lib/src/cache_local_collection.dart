@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:observable_ish/observable_ish.dart';
 
@@ -12,23 +11,21 @@ class CacheLocalCollection<T> {
   Iterable<T> get value => rxValue.value;
 
   CacheLocalCollection._({
-    @required Box<T> box,
-    @required bool Function(T current, T fetched) compare,
-  })  : assert(box != null),
-        assert(compare != null),
-        _box = box,
-        rxValue = RxValue<Iterable<T>>() {
+    required Box<T> box,
+    required bool Function(T current, T fetched) compare,
+  })   : _box = box,
+        rxValue = RxValue<Iterable<T>>([]) {
     _updateRxValue();
     _box.watch().listen((_) => _updateRxValue());
   }
 
   static Future<CacheLocalCollection<K>> register<K>({
-    @required String boxName,
-    TypeAdapter<K> adapter,
-    bool Function(K current, K fetched) compare,
-    HiveCipher cipher,
-    K defaultValue,
-    HiveInterface hiveInterface,
+    required String boxName,
+    TypeAdapter<K>? adapter,
+    required bool Function(K current, K fetched) compare,
+    HiveCipher? cipher,
+    K? defaultValue,
+    HiveInterface? hiveInterface,
   }) async {
     final HiveInterface hive = hiveInterface ?? Hive;
     if (adapter != null && !hive.isAdapterRegistered(adapter.typeId)) {
@@ -45,7 +42,7 @@ class CacheLocalCollection<T> {
     );
   }
 
-  T get(dynamic key) => _box.get(key);
+  T? get(dynamic key) => _box.get(key);
 
   Future<void> put(dynamic key, T value) async {
     await _box.put(key, value);

@@ -17,8 +17,8 @@ class CalendarEventAdapter extends TypeAdapter<CalendarEvent> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CalendarEvent(
-      calendarId: fields[0] as String,
-      event: fields[1] as Event,
+      calendarId: fields[0] as String?,
+      event: fields[1] as Event?,
     );
   }
 

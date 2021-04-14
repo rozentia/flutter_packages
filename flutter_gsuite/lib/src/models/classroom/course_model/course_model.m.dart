@@ -1,10 +1,10 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
-
-import 'package:flutter/foundation.dart';
 import 'package:quiver/iterables.dart';
+
 import '../../../constants/constants.dart';
 import '../../../constants/hive_constants.dart';
 import 'aggregated_coursework.dart';
@@ -18,30 +18,30 @@ class CourseModel extends HiveObject {
   @HiveField(0)
   final Course course;
   @HiveField(1)
-  List<UserProfile> students;
+  List<UserProfile?>? students;
   @HiveField(2)
-  List<UserProfile> teachers;
+  List<UserProfile?>? teachers;
   @HiveField(3)
   final bool isTeacher;
   @HiveField(4)
   final String userId;
   @HiveField(5)
-  List<Announcement> announcements;
+  List<Announcement>? announcements;
   @HiveField(6)
-  List<Topic> topics;
+  List<Topic>? topics;
   @HiveField(7)
-  List<CourseWork> courseWorks;
+  List<CourseWork>? courseWorks;
   @HiveField(8)
-  List<StudentSubmission> courseWorkSubmissions;
+  List<StudentSubmission>? courseWorkSubmissions;
   @HiveField(9)
-  List<CourseWorkMaterial> courseWorkMaterials;
+  List<CourseWorkMaterial>? courseWorkMaterials;
 
   CourseModel({
-    @required this.course,
+    required this.course,
     this.students = const [],
     this.teachers = const [],
-    @required this.userId,
-    @required this.isTeacher,
+    required this.userId,
+    required this.isTeacher,
     this.announcements = const [],
     this.topics = const [],
     this.courseWorks = const [],
@@ -50,31 +50,34 @@ class CourseModel extends HiveObject {
   });
 
   /// The id of the course this model referes to or null if the model is empty
-  String get courseId => course?.id;
+  String get courseId => course.id!;
 
-  Map<String, List<AggregatedCourseWork>> get sortedAggregatedCourseWorks => topics.asMap().map(
+  /// The name of the course (if course had no name it will return 'Untitled course')
+  String get name => course.name ?? 'Untitled course';
+
+  Map<String?, List<AggregatedCourseWork>> get sortedAggregatedCourseWorks => topics!.asMap().map(
         (key, topic) => MapEntry(
           topic.topicId,
-          courseWorks
+          courseWorks!
               .where((courseWork) => courseWork.topicId == topic.topicId)
               .map<AggregatedCourseWork>(
                 (courseWork) => AggregatedCourseWork.fromCourseWork(
                   topic,
                   courseWork,
-                  courseWorkSubmissions,
+                  courseWorkSubmissions!,
                 ),
               )
               .toList(),
         ),
       );
-  Map<String, List<CourseWorkMaterial>> get sortedCourseWorkMaterials => topics.asMap().map((key, topic) => MapEntry(
+  Map<String?, List<CourseWorkMaterial>> get sortedCourseWorkMaterials => topics!.asMap().map((key, topic) => MapEntry(
         topic.topicId,
-        courseWorkMaterials.where((material) => material.topicId == topic.topicId).toList(),
+        courseWorkMaterials!.where((material) => material.topicId == topic.topicId).toList(),
       ));
 
   /// Returns a map representation of the topics data where the keys are the topic name and
   /// the value is a dynamic list holding either CourseWorkMaterial or AggregatedCourseWork
-  Map<String, List<dynamic>> get topicData => topics.asMap().map(
+  Map<String?, List<dynamic>> get topicData => topics!.asMap().map(
         (key, topic) => MapEntry(
             topic.name,
             concat([
@@ -83,36 +86,35 @@ class CourseModel extends HiveObject {
             ]).toList()),
       )..addAll({
           noTopicKey: concat([
-            courseWorks
+            courseWorks!
                 .where((courseWork) => courseWork.topicId == null)
                 .map((courseWork) => AggregatedCourseWork.fromCourseWork(
                       null,
                       courseWork,
-                      courseWorkSubmissions,
+                      courseWorkSubmissions!,
                     )),
-            courseWorkMaterials.where((material) => material.topicId == null),
+            courseWorkMaterials!.where((material) => material.topicId == null),
           ]).toList()
         });
 
   /// Return a user by its [userIdOrEmailOrFullName] or null if not found
-  UserProfile findRosterUser(String userIdOrEmailOrFullName,
+  UserProfile? findRosterUser(String userIdOrEmailOrFullName,
           {bool excludeStudents = false, bool excludeTeachers = true}) =>
       !excludeStudents && !excludeTeachers
           ? null
-          : concat([if (!excludeTeachers) teachers, if (!excludeStudents) students]).firstWhere(
+          : concat([if (!excludeTeachers) teachers!, if (!excludeStudents) students!]).firstWhere(
               (user) =>
-                  user.id == userIdOrEmailOrFullName ||
+                  user!.id == userIdOrEmailOrFullName ||
                   user.emailAddress == userIdOrEmailOrFullName ||
-                  user.name.fullName == userIdOrEmailOrFullName,
+                  user.name!.fullName == userIdOrEmailOrFullName,
               orElse: () => null);
 
-  Topic findCourseTopic(String topicIdOrName) => topics.firstWhere(
+  Topic? findCourseTopic(String topicIdOrName) => topics!.firstWhereOrNull(
         (topic) => topic.topicId == topicIdOrName || topic.name == topicIdOrName,
-        orElse: () => null,
       );
 
   /// Returns either the [data] provided or the resolved [dataFuture] or null if either is null
-  Future<T> _dataOr<T>(T data, Future<T> dataFuture) async {
+  Future<T?> _dataOr<T>(T data, Future<T>? dataFuture) async {
     try {
       return data ?? (dataFuture != null ? await dataFuture : null);
     } catch (e) {
@@ -122,10 +124,10 @@ class CourseModel extends HiveObject {
   }
 
   Future<void> updateRoster({
-    List<UserProfile> studentsInput,
-    List<UserProfile> teachersInput,
-    Future<List<UserProfile>> studentsFuture,
-    Future<List<UserProfile>> teachersFuture,
+    List<UserProfile>? studentsInput,
+    List<UserProfile>? teachersInput,
+    Future<List<UserProfile>>? studentsFuture,
+    Future<List<UserProfile>>? teachersFuture,
   }) async {
     final studentsData = await _dataOr(studentsInput, studentsFuture);
     if (studentsData != null) {
@@ -140,8 +142,8 @@ class CourseModel extends HiveObject {
   }
 
   Future<void> updateAnnouncements({
-    List<Announcement> input,
-    Future<List<Announcement>> future,
+    List<Announcement>? input,
+    Future<List<Announcement>>? future,
   }) async {
     final data = await _dataOr(input, future);
     if (data != null) {
@@ -151,8 +153,8 @@ class CourseModel extends HiveObject {
   }
 
   Future<void> updateCourseTopics({
-    List<Topic> input,
-    Future<List<Topic>> future,
+    List<Topic>? input,
+    Future<List<Topic>>? future,
   }) async {
     final data = await _dataOr(input, future);
     if (data != null) {
@@ -162,8 +164,8 @@ class CourseModel extends HiveObject {
   }
 
   Future<void> updateCourseworks({
-    List<CourseWork> input,
-    Future<List<CourseWork>> future,
+    List<CourseWork>? input,
+    Future<List<CourseWork>>? future,
   }) async {
     final data = await _dataOr(input, future);
     if (data != null) {
@@ -173,8 +175,8 @@ class CourseModel extends HiveObject {
   }
 
   Future<void> updateCourseworkMaterials({
-    List<CourseWorkMaterial> input,
-    Future<List<CourseWorkMaterial>> future,
+    List<CourseWorkMaterial>? input,
+    Future<List<CourseWorkMaterial>>? future,
   }) async {
     final data = await _dataOr(input, future);
     if (data != null) {
@@ -184,8 +186,8 @@ class CourseModel extends HiveObject {
   }
 
   Future<void> updateCourseworkSubmission({
-    List<StudentSubmission> input,
-    Future<List<StudentSubmission>> future,
+    List<StudentSubmission>? input,
+    Future<List<StudentSubmission>>? future,
   }) async {
     final data = await _dataOr(input, future);
     if (data != null) {

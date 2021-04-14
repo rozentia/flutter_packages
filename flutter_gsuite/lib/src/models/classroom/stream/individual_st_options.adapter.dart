@@ -14,7 +14,7 @@ class IndividualStudentsOptionsAdapter extends TypeAdapter<IndividualStudentsOpt
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = IndividualStudentsOptions();
-    resource.studentIds = (fields[0] as List)?.cast<String>();
+    resource.studentIds = (fields[0] as List?)?.cast<String>();
     return resource;
   }
 

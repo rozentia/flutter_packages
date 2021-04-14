@@ -14,9 +14,9 @@ class DateAdapter extends TypeAdapter<Date> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Date();
-    resource.day = fields[0] as int;
-    resource.month = fields[1] as int;
-    resource.year = fields[2] as int;
+    resource.day = fields[0] as int?;
+    resource.month = fields[1] as int?;
+    resource.year = fields[2] as int?;
 
     return resource;
   }

@@ -14,18 +14,18 @@ class AnnouncementAdapter extends TypeAdapter<Announcement> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final course = Announcement();
-    course.alternateLink = fields[0] as String;
-    course.assigneeMode = fields[1] as String;
-    course.courseId = fields[2] as String;
-    course.creatorUserId = fields[3] as String;
-    course.creationTime = fields[4] as String;
-    course.id = fields[5] as String;
-    course.individualStudentsOptions = fields[6] as IndividualStudentsOptions;
-    course.materials = (fields[7] as List)?.cast<Material>();
-    course.scheduledTime = fields[8] as String;
-    course.state = fields[9] as String;
-    course.text = fields[10] as String;
-    course.updateTime = fields[11] as String;
+    course.alternateLink = fields[0] as String?;
+    course.assigneeMode = fields[1] as String?;
+    course.courseId = fields[2] as String?;
+    course.creatorUserId = fields[3] as String?;
+    course.creationTime = fields[4] as String?;
+    course.id = fields[5] as String?;
+    course.individualStudentsOptions = fields[6] as IndividualStudentsOptions?;
+    course.materials = (fields[7] as List?)?.cast<Material>();
+    course.scheduledTime = fields[8] as String?;
+    course.state = fields[9] as String?;
+    course.text = fields[10] as String?;
+    course.updateTime = fields[11] as String?;
     return course;
   }
 

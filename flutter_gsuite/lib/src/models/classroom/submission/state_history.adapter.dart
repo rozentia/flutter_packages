@@ -14,9 +14,9 @@ class StateHistoryAdapter extends TypeAdapter<StateHistory> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = StateHistory();
-    resource.actorUserId = fields[0] as String;
-    resource.state = fields[1] as String;
-    resource.stateTimestamp = fields[2] as String;
+    resource.actorUserId = fields[0] as String?;
+    resource.state = fields[1] as String?;
+    resource.stateTimestamp = fields[2] as String?;
 
     return resource;
   }

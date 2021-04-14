@@ -14,7 +14,7 @@ class AssignmentSubmissionAdapter extends TypeAdapter<AssignmentSubmission> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = AssignmentSubmission();
-    resource.attachments = (fields[0] as List)?.cast<Attachment>();
+    resource.attachments = (fields[0] as List?)?.cast<Attachment>();
     return resource;
   }
 

@@ -40,11 +40,13 @@ abstract class MinAccessRole with _$MinAccessRole {
 }
 
 extension MinAccessRoleValue on MinAccessRole {
+  /// Returns the string representation of the value or an empty string if the value
+  /// is unknown or null
   String get value => maybeWhen(
         freeBusyReader: () => 'freeBusyReader',
         owner: () => 'owner',
         reader: () => 'reader',
         writer: () => 'writer',
-        orElse: () => null,
+        orElse: () => '',
       );
 }

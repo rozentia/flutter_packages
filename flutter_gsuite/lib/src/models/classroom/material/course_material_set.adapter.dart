@@ -14,8 +14,8 @@ class CourseMaterialSetAdapter extends TypeAdapter<CourseMaterialSet> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = CourseMaterialSet();
-    resource.materials = (fields[0] as List)?.cast<CourseMaterial>();
-    resource.title = fields[1] as String;
+    resource.materials = (fields[0] as List?)?.cast<CourseMaterial>();
+    resource.title = fields[1] as String?;
     return resource;
   }
 

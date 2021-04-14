@@ -14,20 +14,20 @@ class UserAdapter extends TypeAdapter<User> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = User();
-    resource.archived = fields[0] as bool;
-    resource.customerId = fields[1] as String;
-    resource.id = fields[2] as String;
-    resource.includeInGlobalAddressList = fields[3] as bool;
-    resource.isAdmin = fields[4] as bool;
-    resource.isDelegatedAdmin = fields[5] as bool;
-    resource.isMailboxSetup = fields[6] as bool;
-    resource.name = fields[7] as UserName;
-    resource.orgUnitPath = fields[8] as String;
-    resource.primaryEmail = fields[9] as String;
-    resource.recoveryEmail = fields[10] as String;
-    resource.recoveryPhone = fields[11] as String;
-    resource.suspended = fields[12] as bool;
-    resource.suspensionReason = fields[13] as String;
+    resource.archived = fields[0] as bool?;
+    resource.customerId = fields[1] as String?;
+    resource.id = fields[2] as String?;
+    resource.includeInGlobalAddressList = fields[3] as bool?;
+    resource.isAdmin = fields[4] as bool?;
+    resource.isDelegatedAdmin = fields[5] as bool?;
+    resource.isMailboxSetup = fields[6] as bool?;
+    resource.name = fields[7] as UserName?;
+    resource.orgUnitPath = fields[8] as String?;
+    resource.primaryEmail = fields[9] as String?;
+    resource.recoveryEmail = fields[10] as String?;
+    resource.recoveryPhone = fields[11] as String?;
+    resource.suspended = fields[12] as bool?;
+    resource.suspensionReason = fields[13] as String?;
     return resource;
   }
 
@@ -36,33 +36,33 @@ class UserAdapter extends TypeAdapter<User> {
     writer
       ..writeByte(14)
       ..writeByte(0)
-      ..write<bool>(obj.archived)
+      ..write<bool?>(obj.archived)
       ..writeByte(1)
-      ..write<String>(obj.customerId)
+      ..write<String?>(obj.customerId)
       ..writeByte(2)
-      ..write<String>(obj.id)
+      ..write<String?>(obj.id)
       ..writeByte(3)
-      ..write<bool>(obj.includeInGlobalAddressList)
+      ..write<bool?>(obj.includeInGlobalAddressList)
       ..writeByte(4)
-      ..write<bool>(obj.isAdmin)
+      ..write<bool?>(obj.isAdmin)
       ..writeByte(5)
-      ..write<bool>(obj.isDelegatedAdmin)
+      ..write<bool?>(obj.isDelegatedAdmin)
       ..writeByte(6)
-      ..write<bool>(obj.isMailboxSetup)
+      ..write<bool?>(obj.isMailboxSetup)
       ..writeByte(7)
-      ..write<UserName>(obj.name)
+      ..write<UserName?>(obj.name)
       ..writeByte(8)
-      ..write<String>(obj.orgUnitPath)
+      ..write<String?>(obj.orgUnitPath)
       ..writeByte(9)
-      ..write<String>(obj.primaryEmail)
+      ..write<String?>(obj.primaryEmail)
       ..writeByte(10)
-      ..write<String>(obj.recoveryEmail)
+      ..write<String?>(obj.recoveryEmail)
       ..writeByte(11)
-      ..write<String>(obj.recoveryPhone)
+      ..write<String?>(obj.recoveryPhone)
       ..writeByte(12)
-      ..write<bool>(obj.suspended)
+      ..write<bool?>(obj.suspended)
       ..writeByte(13)
-      ..write<String>(obj.suspensionReason);
+      ..write<String?>(obj.suspensionReason);
   }
 
   @override

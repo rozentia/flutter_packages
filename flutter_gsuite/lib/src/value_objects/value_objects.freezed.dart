@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'value_objects.dart';
 
@@ -9,58 +9,61 @@ part of 'value_objects.dart';
 
 T _$identity<T>(T value) => value;
 
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 /// @nodoc
 class _$UserProjectionTearOff {
   const _$UserProjectionTearOff();
 
-// ignore: unused_element
   _Basic basic() {
     return const _Basic();
   }
 
-// ignore: unused_element
   _Custom custom() {
     return const _Custom();
   }
 
-// ignore: unused_element
   _Full full() {
     return const _Full();
   }
 }
 
 /// @nodoc
-// ignore: unused_element
 const $UserProjection = _$UserProjectionTearOff();
 
 /// @nodoc
 mixin _$UserProjection {
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult basic(),
-    @required TResult custom(),
-    @required TResult full(),
-  });
+  TResult when<TResult extends Object?>({
+    required TResult Function() basic,
+    required TResult Function() custom,
+    required TResult Function() full,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult basic(),
-    TResult custom(),
-    TResult full(),
-    @required TResult orElse(),
-  });
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? basic,
+    TResult Function()? custom,
+    TResult Function()? full,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult basic(_Basic value),
-    @required TResult custom(_Custom value),
-    @required TResult full(_Full value),
-  });
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Basic value) basic,
+    required TResult Function(_Custom value) custom,
+    required TResult Function(_Full value) full,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult basic(_Basic value),
-    TResult custom(_Custom value),
-    TResult full(_Full value),
-    @required TResult orElse(),
-  });
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Basic value)? basic,
+    TResult Function(_Custom value)? custom,
+    TResult Function(_Full value)? full,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -115,26 +118,22 @@ class _$_Basic implements _Basic {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult basic(),
-    @required TResult custom(),
-    @required TResult full(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() basic,
+    required TResult Function() custom,
+    required TResult Function() full,
   }) {
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
     return basic();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult basic(),
-    TResult custom(),
-    TResult full(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? basic,
+    TResult Function()? custom,
+    TResult Function()? full,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (basic != null) {
       return basic();
     }
@@ -143,26 +142,22 @@ class _$_Basic implements _Basic {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult basic(_Basic value),
-    @required TResult custom(_Custom value),
-    @required TResult full(_Full value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Basic value) basic,
+    required TResult Function(_Custom value) custom,
+    required TResult Function(_Full value) full,
   }) {
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
     return basic(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult basic(_Basic value),
-    TResult custom(_Custom value),
-    TResult full(_Full value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Basic value)? basic,
+    TResult Function(_Custom value)? custom,
+    TResult Function(_Full value)? full,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (basic != null) {
       return basic(this);
     }
@@ -209,26 +204,22 @@ class _$_Custom implements _Custom {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult basic(),
-    @required TResult custom(),
-    @required TResult full(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() basic,
+    required TResult Function() custom,
+    required TResult Function() full,
   }) {
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
     return custom();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult basic(),
-    TResult custom(),
-    TResult full(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? basic,
+    TResult Function()? custom,
+    TResult Function()? full,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (custom != null) {
       return custom();
     }
@@ -237,26 +228,22 @@ class _$_Custom implements _Custom {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult basic(_Basic value),
-    @required TResult custom(_Custom value),
-    @required TResult full(_Full value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Basic value) basic,
+    required TResult Function(_Custom value) custom,
+    required TResult Function(_Full value) full,
   }) {
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
     return custom(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult basic(_Basic value),
-    TResult custom(_Custom value),
-    TResult full(_Full value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Basic value)? basic,
+    TResult Function(_Custom value)? custom,
+    TResult Function(_Full value)? full,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (custom != null) {
       return custom(this);
     }
@@ -303,26 +290,22 @@ class _$_Full implements _Full {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult basic(),
-    @required TResult custom(),
-    @required TResult full(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() basic,
+    required TResult Function() custom,
+    required TResult Function() full,
   }) {
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
     return full();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult basic(),
-    TResult custom(),
-    TResult full(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? basic,
+    TResult Function()? custom,
+    TResult Function()? full,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (full != null) {
       return full();
     }
@@ -331,26 +314,22 @@ class _$_Full implements _Full {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult basic(_Basic value),
-    @required TResult custom(_Custom value),
-    @required TResult full(_Full value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Basic value) basic,
+    required TResult Function(_Custom value) custom,
+    required TResult Function(_Full value) full,
   }) {
-    assert(basic != null);
-    assert(custom != null);
-    assert(full != null);
     return full(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult basic(_Basic value),
-    TResult custom(_Custom value),
-    TResult full(_Full value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Basic value)? basic,
+    TResult Function(_Custom value)? custom,
+    TResult Function(_Full value)? full,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (full != null) {
       return full(this);
     }
@@ -366,63 +345,62 @@ abstract class _Full implements UserProjection {
 class _$MinAccessRoleTearOff {
   const _$MinAccessRoleTearOff();
 
-// ignore: unused_element
   _FreeBusyReader freeBusyReader() {
     return const _FreeBusyReader();
   }
 
-// ignore: unused_element
   _Owner owner() {
     return const _Owner();
   }
 
-// ignore: unused_element
   _Reader reader() {
     return const _Reader();
   }
 
-// ignore: unused_element
   _Writer writer() {
     return const _Writer();
   }
 }
 
 /// @nodoc
-// ignore: unused_element
 const $MinAccessRole = _$MinAccessRoleTearOff();
 
 /// @nodoc
 mixin _$MinAccessRole {
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult freeBusyReader(),
-    @required TResult owner(),
-    @required TResult reader(),
-    @required TResult writer(),
-  });
+  TResult when<TResult extends Object?>({
+    required TResult Function() freeBusyReader,
+    required TResult Function() owner,
+    required TResult Function() reader,
+    required TResult Function() writer,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult freeBusyReader(),
-    TResult owner(),
-    TResult reader(),
-    TResult writer(),
-    @required TResult orElse(),
-  });
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? freeBusyReader,
+    TResult Function()? owner,
+    TResult Function()? reader,
+    TResult Function()? writer,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult freeBusyReader(_FreeBusyReader value),
-    @required TResult owner(_Owner value),
-    @required TResult reader(_Reader value),
-    @required TResult writer(_Writer value),
-  });
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FreeBusyReader value) freeBusyReader,
+    required TResult Function(_Owner value) owner,
+    required TResult Function(_Reader value) reader,
+    required TResult Function(_Writer value) writer,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult freeBusyReader(_FreeBusyReader value),
-    TResult owner(_Owner value),
-    TResult reader(_Reader value),
-    TResult writer(_Writer value),
-    @required TResult orElse(),
-  });
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FreeBusyReader value)? freeBusyReader,
+    TResult Function(_Owner value)? owner,
+    TResult Function(_Reader value)? reader,
+    TResult Function(_Writer value)? writer,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -480,29 +458,24 @@ class _$_FreeBusyReader implements _FreeBusyReader {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult freeBusyReader(),
-    @required TResult owner(),
-    @required TResult reader(),
-    @required TResult writer(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() freeBusyReader,
+    required TResult Function() owner,
+    required TResult Function() reader,
+    required TResult Function() writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return freeBusyReader();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult freeBusyReader(),
-    TResult owner(),
-    TResult reader(),
-    TResult writer(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? freeBusyReader,
+    TResult Function()? owner,
+    TResult Function()? reader,
+    TResult Function()? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (freeBusyReader != null) {
       return freeBusyReader();
     }
@@ -511,29 +484,24 @@ class _$_FreeBusyReader implements _FreeBusyReader {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult freeBusyReader(_FreeBusyReader value),
-    @required TResult owner(_Owner value),
-    @required TResult reader(_Reader value),
-    @required TResult writer(_Writer value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FreeBusyReader value) freeBusyReader,
+    required TResult Function(_Owner value) owner,
+    required TResult Function(_Reader value) reader,
+    required TResult Function(_Writer value) writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return freeBusyReader(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult freeBusyReader(_FreeBusyReader value),
-    TResult owner(_Owner value),
-    TResult reader(_Reader value),
-    TResult writer(_Writer value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FreeBusyReader value)? freeBusyReader,
+    TResult Function(_Owner value)? owner,
+    TResult Function(_Reader value)? reader,
+    TResult Function(_Writer value)? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (freeBusyReader != null) {
       return freeBusyReader(this);
     }
@@ -580,29 +548,24 @@ class _$_Owner implements _Owner {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult freeBusyReader(),
-    @required TResult owner(),
-    @required TResult reader(),
-    @required TResult writer(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() freeBusyReader,
+    required TResult Function() owner,
+    required TResult Function() reader,
+    required TResult Function() writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return owner();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult freeBusyReader(),
-    TResult owner(),
-    TResult reader(),
-    TResult writer(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? freeBusyReader,
+    TResult Function()? owner,
+    TResult Function()? reader,
+    TResult Function()? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (owner != null) {
       return owner();
     }
@@ -611,29 +574,24 @@ class _$_Owner implements _Owner {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult freeBusyReader(_FreeBusyReader value),
-    @required TResult owner(_Owner value),
-    @required TResult reader(_Reader value),
-    @required TResult writer(_Writer value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FreeBusyReader value) freeBusyReader,
+    required TResult Function(_Owner value) owner,
+    required TResult Function(_Reader value) reader,
+    required TResult Function(_Writer value) writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return owner(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult freeBusyReader(_FreeBusyReader value),
-    TResult owner(_Owner value),
-    TResult reader(_Reader value),
-    TResult writer(_Writer value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FreeBusyReader value)? freeBusyReader,
+    TResult Function(_Owner value)? owner,
+    TResult Function(_Reader value)? reader,
+    TResult Function(_Writer value)? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (owner != null) {
       return owner(this);
     }
@@ -680,29 +638,24 @@ class _$_Reader implements _Reader {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult freeBusyReader(),
-    @required TResult owner(),
-    @required TResult reader(),
-    @required TResult writer(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() freeBusyReader,
+    required TResult Function() owner,
+    required TResult Function() reader,
+    required TResult Function() writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return reader();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult freeBusyReader(),
-    TResult owner(),
-    TResult reader(),
-    TResult writer(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? freeBusyReader,
+    TResult Function()? owner,
+    TResult Function()? reader,
+    TResult Function()? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (reader != null) {
       return reader();
     }
@@ -711,29 +664,24 @@ class _$_Reader implements _Reader {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult freeBusyReader(_FreeBusyReader value),
-    @required TResult owner(_Owner value),
-    @required TResult reader(_Reader value),
-    @required TResult writer(_Writer value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FreeBusyReader value) freeBusyReader,
+    required TResult Function(_Owner value) owner,
+    required TResult Function(_Reader value) reader,
+    required TResult Function(_Writer value) writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return reader(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult freeBusyReader(_FreeBusyReader value),
-    TResult owner(_Owner value),
-    TResult reader(_Reader value),
-    TResult writer(_Writer value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FreeBusyReader value)? freeBusyReader,
+    TResult Function(_Owner value)? owner,
+    TResult Function(_Reader value)? reader,
+    TResult Function(_Writer value)? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (reader != null) {
       return reader(this);
     }
@@ -780,29 +728,24 @@ class _$_Writer implements _Writer {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult freeBusyReader(),
-    @required TResult owner(),
-    @required TResult reader(),
-    @required TResult writer(),
+  TResult when<TResult extends Object?>({
+    required TResult Function() freeBusyReader,
+    required TResult Function() owner,
+    required TResult Function() reader,
+    required TResult Function() writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return writer();
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult freeBusyReader(),
-    TResult owner(),
-    TResult reader(),
-    TResult writer(),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? freeBusyReader,
+    TResult Function()? owner,
+    TResult Function()? reader,
+    TResult Function()? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (writer != null) {
       return writer();
     }
@@ -811,29 +754,24 @@ class _$_Writer implements _Writer {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult freeBusyReader(_FreeBusyReader value),
-    @required TResult owner(_Owner value),
-    @required TResult reader(_Reader value),
-    @required TResult writer(_Writer value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_FreeBusyReader value) freeBusyReader,
+    required TResult Function(_Owner value) owner,
+    required TResult Function(_Reader value) reader,
+    required TResult Function(_Writer value) writer,
   }) {
-    assert(freeBusyReader != null);
-    assert(owner != null);
-    assert(reader != null);
-    assert(writer != null);
     return writer(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult freeBusyReader(_FreeBusyReader value),
-    TResult owner(_Owner value),
-    TResult reader(_Reader value),
-    TResult writer(_Writer value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_FreeBusyReader value)? freeBusyReader,
+    TResult Function(_Owner value)? owner,
+    TResult Function(_Reader value)? reader,
+    TResult Function(_Writer value)? writer,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (writer != null) {
       return writer(this);
     }

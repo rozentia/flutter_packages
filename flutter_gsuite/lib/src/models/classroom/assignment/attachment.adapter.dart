@@ -14,10 +14,10 @@ class AttachmentAdapter extends TypeAdapter<Attachment> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Attachment();
-    resource.driveFile = fields[0] as DriveFile;
-    resource.form = fields[1] as Form;
-    resource.link = fields[2] as Link;
-    resource.youTubeVideo = fields[3] as YouTubeVideo;
+    resource.driveFile = fields[0] as DriveFile?;
+    resource.form = fields[1] as Form?;
+    resource.link = fields[2] as Link?;
+    resource.youTubeVideo = fields[3] as YouTubeVideo?;
 
     return resource;
   }

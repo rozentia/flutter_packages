@@ -14,20 +14,20 @@ class CourseWorkMaterialAdapter extends TypeAdapter<CourseWorkMaterial> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = CourseWorkMaterial();
-    resource.alternateLink = fields[0] as String;
-    resource.assigneeMode = fields[1] as String;
-    resource.courseId = fields[2] as String;
-    resource.individualStudentsOptions = fields[3] as IndividualStudentsOptions;
-    resource.creationTime = fields[4] as String;
-    resource.description = fields[5] as String;
-    resource.creatorUserId = fields[6] as String;
-    resource.id = fields[7] as String;
-    resource.materials = (fields[8] as List)?.cast<Material>();
-    resource.updateTime = fields[9] as String;
-    resource.scheduledTime = fields[10] as String;
-    resource.state = fields[11] as String;
-    resource.title = fields[12] as String;
-    resource.topicId = fields[13] as String;
+    resource.alternateLink = fields[0] as String?;
+    resource.assigneeMode = fields[1] as String?;
+    resource.courseId = fields[2] as String?;
+    resource.individualStudentsOptions = fields[3] as IndividualStudentsOptions?;
+    resource.creationTime = fields[4] as String?;
+    resource.description = fields[5] as String?;
+    resource.creatorUserId = fields[6] as String?;
+    resource.id = fields[7] as String?;
+    resource.materials = (fields[8] as List?)?.cast<Material>();
+    resource.updateTime = fields[9] as String?;
+    resource.scheduledTime = fields[10] as String?;
+    resource.state = fields[11] as String?;
+    resource.title = fields[12] as String?;
+    resource.topicId = fields[13] as String?;
 
     return resource;
   }

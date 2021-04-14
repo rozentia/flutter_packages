@@ -13,8 +13,8 @@ class SharedDriveFileAdapter extends TypeAdapter<SharedDriveFile> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = SharedDriveFile();
-    resource.driveFile = fields[0] as DriveFile;
-    resource.shareMode = fields[1] as String;
+    resource.driveFile = fields[0] as DriveFile?;
+    resource.shareMode = fields[1] as String?;
     return resource;
   }
 

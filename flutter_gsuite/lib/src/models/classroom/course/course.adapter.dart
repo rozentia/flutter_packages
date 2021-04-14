@@ -14,21 +14,21 @@ class CourseAdapter extends TypeAdapter<Course> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     final resource = Course();
-    resource.alternateLink = fields[0] as String;
-    resource.calendarId = fields[1] as String;
-    resource.courseGroupEmail = fields[2] as String;
-    resource.courseState = fields[3] as String;
-    resource.creationTime = fields[4] as String;
-    resource.description = fields[5] as String;
-    resource.descriptionHeading = fields[6] as String;
-    resource.enrollmentCode = fields[7] as String;
-    resource.id = fields[8] as String;
-    resource.name = fields[9] as String;
-    resource.ownerId = fields[10] as String;
-    resource.room = fields[11] as String;
-    resource.section = fields[12] as String;
-    resource.teacherGroupEmail = fields[13] as String;
-    resource.updateTime = fields[14] as String;
+    resource.alternateLink = fields[0] as String?;
+    resource.calendarId = fields[1] as String?;
+    resource.courseGroupEmail = fields[2] as String?;
+    resource.courseState = fields[3] as String?;
+    resource.creationTime = fields[4] as String?;
+    resource.description = fields[5] as String?;
+    resource.descriptionHeading = fields[6] as String?;
+    resource.enrollmentCode = fields[7] as String?;
+    resource.id = fields[8] as String?;
+    resource.name = fields[9] as String?;
+    resource.ownerId = fields[10] as String?;
+    resource.room = fields[11] as String?;
+    resource.section = fields[12] as String?;
+    resource.teacherGroupEmail = fields[13] as String?;
+    resource.updateTime = fields[14] as String?;
     return resource;
   }
 

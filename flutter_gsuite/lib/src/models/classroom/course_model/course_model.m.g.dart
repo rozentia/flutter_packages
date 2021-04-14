@@ -18,15 +18,15 @@ class CourseModelAdapter extends TypeAdapter<CourseModel> {
     };
     return CourseModel(
       course: fields[0] as Course,
-      students: (fields[1] as List)?.cast<UserProfile>(),
-      teachers: (fields[2] as List)?.cast<UserProfile>(),
+      students: (fields[1] as List?)?.cast<UserProfile?>(),
+      teachers: (fields[2] as List?)?.cast<UserProfile?>(),
       userId: fields[4] as String,
       isTeacher: fields[3] as bool,
-      announcements: (fields[5] as List)?.cast<Announcement>(),
-      topics: (fields[6] as List)?.cast<Topic>(),
-      courseWorks: (fields[7] as List)?.cast<CourseWork>(),
-      courseWorkMaterials: (fields[9] as List)?.cast<CourseWorkMaterial>(),
-      courseWorkSubmissions: (fields[8] as List)?.cast<StudentSubmission>(),
+      announcements: (fields[5] as List?)?.cast<Announcement>(),
+      topics: (fields[6] as List?)?.cast<Topic>(),
+      courseWorks: (fields[7] as List?)?.cast<CourseWork>(),
+      courseWorkMaterials: (fields[9] as List?)?.cast<CourseWorkMaterial>(),
+      courseWorkSubmissions: (fields[8] as List?)?.cast<StudentSubmission>(),
     );
   }
 
