@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'package:async/async.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 import 'package:googleapis/admin/directory_v1.dart';
-import 'package:googleapis/admin/reports_v1.dart' as reports;
+import 'package:googleapis/admin/reports_v1.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -23,10 +21,7 @@ void _logMsg(String msg, String src, [dynamic err]) => log(
       error: err,
     );
 void _logErr(String src, [dynamic err]) => _logMsg('error', src, err);
-
-void _checkApi(dynamic api) {
-  if (api == null) throw Exception('api client not present');
-}
+void _logDone(String src) => _logMsg('success', src);
 
 class GsuiteService {
   /// OAuth scopes required for the user's OAuth consent and GoogleSignIn instance
@@ -35,9 +30,9 @@ class GsuiteService {
   /// OAuth scopes required for service account and admin user
   static const adminScopes = ADMIN_SCOPES;
 
-  AuthClient _client;
-  AuthClient _adminClient;
-  String _userEmail;
+  AuthClient? _client;
+  AuthClient? _adminClient;
+  String? _userEmail;
 
   GsuiteService();
   // TODO Review this stream subscription
@@ -62,7 +57,7 @@ class GsuiteService {
   */
 
   /// The scopes that require consent of the user to use this library
-  String get userEmail => _userEmail;
+  String? get userEmail => _userEmail;
 
   /// True if the client is set
   bool get hasClient => _client != null;
@@ -70,18 +65,27 @@ class GsuiteService {
   /// True is the super admin client is set
   bool get hasAdminClient => _adminClient != null;
 
-  AdminApi get _adminApi => _client != null ? AdminApi(_client) : null;
-  AdminApi get _superAdminApi => _adminClient != null ? AdminApi(_adminClient) : null;
-  CalendarApi get _calendarApi => _client != null ? CalendarApi(_client) : null;
-  CalendarApi get _adminCalendarApi => _adminClient != null ? CalendarApi(_adminClient) : null;
-  ClassroomApi get _classroomApi => _client != null ? ClassroomApi(_client) : null;
-  ClassroomApi get _adminClassroomApi => _adminClient != null ? ClassroomApi(_adminClient) : null;
-  reports.AdminApi get _reportsApi => _adminClient != null ? reports.AdminApi(_adminClient) : null;
+  String noClientForApiMsg(String apiName) => 'There is no client available to instantiate $apiName';
+
+  DirectoryApi get _adminApi =>
+      _client != null ? DirectoryApi(_client!) : throw Exception(noClientForApiMsg('DirectoryApi'));
+  DirectoryApi get _superAdminApi =>
+      _adminClient != null ? DirectoryApi(_adminClient!) : throw Exception(noClientForApiMsg('DirectoryApi'));
+  CalendarApi get _calendarApi =>
+      _client != null ? CalendarApi(_client!) : throw Exception(noClientForApiMsg('CalendarApi'));
+  CalendarApi get _adminCalendarApi =>
+      _adminClient != null ? CalendarApi(_adminClient!) : throw Exception(noClientForApiMsg('CalendarApi'));
+  ClassroomApi get _classroomApi =>
+      _client != null ? ClassroomApi(_client!) : throw Exception(noClientForApiMsg('ClassroomApi'));
+  ClassroomApi get _adminClassroomApi =>
+      _adminClient != null ? ClassroomApi(_adminClient!) : throw Exception(noClientForApiMsg('ClassroomApi'));
+  ReportsApi get _reportsApi =>
+      _adminClient != null ? ReportsApi(_adminClient!) : throw Exception(noClientForApiMsg('ReportsApi'));
 
   //-                                                                       @factoryMethod
   static Future<GsuiteService> init({
-    @required String serviceAccountJSONCredentials,
-    @required String googleAdminEmail,
+    required String serviceAccountJSONCredentials,
+    required String googleAdminEmail,
   }) async {
     try {
       final gsuiteService = GsuiteService();
@@ -93,10 +97,7 @@ class GsuiteService {
       // }
 
       //= Set service account superadmin client
-      if (serviceAccountJSONCredentials != null &&
-          serviceAccountJSONCredentials.isNotEmpty &&
-          googleAdminEmail != null &&
-          googleAdminEmail.isNotEmpty) {
+      if (serviceAccountJSONCredentials.isNotEmpty && googleAdminEmail.isNotEmpty) {
         await gsuiteService.setAdminClient(
           serviceAccountJSONCredentials: serviceAccountJSONCredentials,
           adminEmail: googleAdminEmail,
@@ -113,9 +114,9 @@ class GsuiteService {
   /// providing [serviceAccountJSONCredentials] and a [userEmail] for impersonating a user.\
   /// The raw client or the service account must have the required scopes used in this package.
   Future<void> setClient({
-    @required String userEmail,
-    String serviceAccountJSONCredentials,
-    AuthClient client,
+    required String userEmail,
+    String? serviceAccountJSONCredentials,
+    AuthClient? client,
   }) async {
     if (client != null) {
       final List<String> scopesRequiringConsent = [];
@@ -145,6 +146,7 @@ class GsuiteService {
     try {
       _client = await getAccessClient(serviceAccountJSONCredentials, userEmail);
       _userEmail = userEmail;
+      _logDone('setClient');
     } catch (e) {
       _logErr('setClient', e);
       rethrow;
@@ -156,9 +158,9 @@ class GsuiteService {
   /// and a [userEmail] for impersonating a user.\
   /// The raw client or the service account must have the required scopes used in this package.
   Future<void> setAdminClient({
-    String adminEmail,
-    String serviceAccountJSONCredentials,
-    AuthClient client,
+    String? adminEmail,
+    String? serviceAccountJSONCredentials,
+    AuthClient? client,
   }) async {
     if (client != null) {
       _adminClient = client;
@@ -177,6 +179,7 @@ class GsuiteService {
       );
       // await getAccessClient(serviceAccountJSONCredentials, userEmail);
       _userEmail = userEmail;
+      _logDone('setAdminClient');
     } catch (e) {
       _logErr('setAdminClient', e);
       rethrow;
@@ -193,14 +196,13 @@ class GsuiteService {
 
   /// Get own User data or provided email's user if allowed.\
   /// (uses regular client)
-  Future<User> fetchUser({
-    String email,
+  Future<User?> fetchUser({
+    String? email,
     UserProjection projection = const UserProjection.basic(),
   }) async {
     final userKey = email ?? _userEmail;
     if (userKey == null) return null;
     try {
-      _checkApi(_adminApi);
       return _adminApi.users.get(
         userKey,
         projection: projection.value,
@@ -213,11 +215,10 @@ class GsuiteService {
 
   /// Get User for the provided [userEmail] or the currently logged in user\
   /// (requires admin client)
-  Future<User> fetchUserData({String userEmail, UserProjection projection = const UserProjection.basic()}) async {
+  Future<User?> fetchUserData({String? userEmail, UserProjection projection = const UserProjection.basic()}) async {
     final userKey = userEmail ?? _userEmail;
     if (userKey == null) return null;
     try {
-      _checkApi(_superAdminApi);
       return _superAdminApi.users.get(
         userKey,
         viewType: 'admin_view',
@@ -232,32 +233,19 @@ class GsuiteService {
   /// Get groups whose user with [userId] is member of (requires admin client)
   Future<List<Group>> fetchUserGroups(String userId) async {
     try {
-      _checkApi(_superAdminApi);
       final groups = await _superAdminApi.groups.list(userKey: userId);
-      return groups?.groups ?? [];
+      return groups.groups ?? [];
     } catch (e) {
       _logErr('fetchUserGroup', e);
       rethrow;
     }
   }
 
-  // TODO delete this
-  /// Get user is teacher (uses admin client) by checking
-  /// if user is member of teachers group
-  // Future<bool> userIsTeacher() async {
-  //   if (_userEmail == null) return false;
-  //   final adminApi = AdminApi(_adminClient);
-  //   final result =
-  //       await adminApi.members.hasMember(GSUITE_TEACHERS_GROUP_KEY, _userEmail);
-  //   return result.isMember;
-  // }
-
   /// Returns the list of members email adresses of given group (requires admin client)
   Future<List<Member>> fetchGroupMembers(String groupKey) async {
     try {
-      _checkApi(_adminApi);
       final result = await _adminApi.members.list(groupKey);
-      return result.members;
+      return result.members ?? [];
     } catch (e) {
       _logErr('fetchGroupMembers', e);
       rethrow;
@@ -267,13 +255,12 @@ class GsuiteService {
   /// Returns the full list of users (requires admin client)
   Future<List<User>> searchForUser(String query) async {
     try {
-      _checkApi(_superAdminApi);
       final result = await _superAdminApi.users.list(
         query: query,
         domain: 'alicialonso.org',
         maxResults: 100,
       );
-      return result.users;
+      return result.users ?? [];
     } catch (e) {
       _logErr('searchForUser', e);
       rethrow;
@@ -285,9 +272,8 @@ class GsuiteService {
   /// Returns all calendars available for the user the auth client is impersonating
   Future<List<CalendarListEntry>> fetchUserCalendars([minAccessRole]) async {
     try {
-      _checkApi(_calendarApi);
       final calendarList = await _calendarApi.calendarList.list();
-      return calendarList.items;
+      return calendarList.items ?? [];
     } catch (e) {
       _logErr('fetchUserCalendars', e);
       rethrow;
@@ -300,9 +286,8 @@ class GsuiteService {
   /// Returns all events of the specified calendarId
   Future<List<Event>> fetchCalendarEvents(String calendarId) async {
     try {
-      _checkApi(_calendarApi);
       final events = await _calendarApi.events.list(calendarId);
-      return events.items;
+      return events.items ?? [];
     } catch (e) {
       _logErr('fetchCalendarEvents', e);
       rethrow;
@@ -312,9 +297,8 @@ class GsuiteService {
   /// Returns events using admin credentials
   Future<List<Event>> fetchCalendarEventsAsAdmin(String calendarId) async {
     try {
-      _checkApi(_adminCalendarApi);
       final events = await _adminCalendarApi.events.list(calendarId, maxResults: 300);
-      return events.items;
+      return events.items ?? [];
     } catch (e) {
       _logErr('fetchCalendarEventsAsAdmin', e);
       rethrow;
@@ -324,21 +308,20 @@ class GsuiteService {
   /// Returns all events that are programmed to take place from the request moment
   /// to end of day (23:59h) from all calendars of the impersonated user
   /// or those ids if provided
-  Future<List<Tuple2<String, Event>>> fetchTodayEvents({
+  Future<List<Tuple2<String?, Event>>> fetchTodayEvents({
     List<String> calendars = const <String>[],
   }) async {
     try {
       if (calendars.isEmpty) {
-        _checkApi(_calendarApi);
         final fetched = await _calendarApi.calendarList.list();
-        calendars.addAll(fetched.items.map((calendar) => calendar.id));
+        calendars.addAll(
+            (fetched.items ?? []).where((element) => element.id != null).map<String>((calendar) => calendar.id!));
       }
       if (calendars.isEmpty) {
         return [];
       }
 
       final List<Tuple2<String, Event>> response = [];
-      _checkApi(_calendarApi);
       for (final calendarId in calendars) {
         final events = await _calendarApi.events.list(
           calendarId,
@@ -346,14 +329,14 @@ class GsuiteService {
           timeMin: DateTime.now().toUtc(),
           timeMax: DateTime.now().endOfToday.toUtc(),
         );
-        if (events.items.isEmpty) continue;
+        if ((events.items ?? []).isEmpty) continue;
 
-        response.addAll(events.items.map((event) => Tuple2(calendarId, event)));
+        response.addAll(events.items!.map((event) => Tuple2(calendarId, event)));
       }
       return response
         ..sort(
-          (t1, t2) => t1.value2.start.dateTime != null && t2.value2.start.dateTime != null
-              ? t1.value2.start.dateTime.compareTo(t2.value2.start.dateTime)
+          (t1, t2) => t1.value2.start!.dateTime != null && t2.value2.start!.dateTime != null
+              ? t1.value2.start!.dateTime!.compareTo(t2.value2.start!.dateTime!)
               : 1,
         );
     } catch (e) {
@@ -365,17 +348,16 @@ class GsuiteService {
   /// Returns all events from all calendars available to the impersonated
   /// user or those ids if provided
   Future<List<CalendarEvent>> fetchAllEvents({
-    List<String> calendars = const [],
+    List<String?> calendars = const [],
   }) async {
     try {
-      _checkApi(_calendarApi);
       final fetched = await _calendarApi.calendarList.list();
       calendars.addAll([
         // TODO make a way to include a set of calendar ids to accomodate this
         //!...CALENDAR_ID_OFFICIAL_DEFAULT_LIST,
-        ...fetched.items.map((calendar) => calendar.id),
+        ...fetched.items!.map((calendar) => calendar.id),
       ]);
-      final calendarIds = calendars.toSet().toList();
+      final calendarIds = calendars.clean.toSet().toList();
 
       final List<CalendarEvent> response = [];
 
@@ -384,9 +366,9 @@ class GsuiteService {
           calendarId,
           singleEvents: true,
         );
-        if (events.items.isEmpty) continue;
+        if (events.items!.isEmpty) continue;
 
-        response.addAll(events.items.map((event) => CalendarEvent(calendarId: calendarId, event: event)));
+        response.addAll(events.items!.map((event) => CalendarEvent(calendarId: calendarId, event: event)));
       }
       return response;
     } catch (e) {
@@ -397,12 +379,11 @@ class GsuiteService {
 
   /// Returns all events from all calendars available to the impersonated
   /// user or those ids if provided
-  Future<CalendarEvent> fetchSingle(String jointCalendarAndEventId) async {
+  Future<CalendarEvent?> fetchSingle(String jointCalendarAndEventId) async {
     try {
-      if (jointCalendarAndEventId == null || jointCalendarAndEventId.isEmpty) {
+      if (jointCalendarAndEventId.isEmpty) {
         return null;
       }
-      _checkApi(_calendarApi);
       final ids = jointCalendarAndEventId.split('|');
       final event = await _calendarApi.events.get(ids[0], ids[1]);
       return CalendarEvent(calendarId: ids[0], event: event);
@@ -415,9 +396,8 @@ class GsuiteService {
   /// Fetch event's attendees
   Future<List<EventAttendee>> fetchEventAttendees(String calendarId, String eventId) async {
     try {
-      _checkApi(_calendarApi);
       final event = await _calendarApi.events.get(calendarId, eventId);
-      return event.attendees;
+      return event.attendees ?? [];
     } catch (e) {
       _logErr('fetchEventAttendees', e);
       rethrow;
@@ -429,17 +409,17 @@ class GsuiteService {
   /// Returns all available teaching [Course] of the signed in user
   Future<List<Course>> fetchUserCourses() async {
     try {
-      final result = await Future.wait<List<Course>>([
+      final result = await Future.wait<List<Course>?>([
         fetchUserTeachingCourses(),
         fetchUserEnrolledCourses(),
       ]);
 
       final allCourses = result.fold<List<Course>>(
         [],
-        (prev, curr) => [...prev, ...curr],
+        (prev, curr) => [...prev, ...curr!],
       );
 
-      _logMsg('fetched ${allCourses?.length} courses', 'fetchUserCourses');
+      _logMsg('fetched ${allCourses.length} courses', 'fetchUserCourses');
       return allCourses;
     } catch (e) {
       _logErr('fetchUserCourses', e);
@@ -450,12 +430,8 @@ class GsuiteService {
   /// Returns all available teaching courses of the signed in user
   Future<List<Course>> fetchUserTeachingCourses() async {
     try {
-      _checkApi(_classroomApi);
-      final coursesResponse = await _classroomApi.courses.list(
-        teacherId: 'me',
-      );
-      _logMsg('fetched ${coursesResponse?.courses?.length} courses', 'fetchUserTeachingCourses');
-      return coursesResponse.courses;
+      final coursesResponse = await _classroomApi.courses.list(teacherId: 'me');
+      return (coursesResponse.courses ?? []).where((course) => course.id != null && course.id!.isNotEmpty).toList();
     } catch (e) {
       _logErr('fetchUserCourses', e);
       rethrow;
@@ -465,13 +441,8 @@ class GsuiteService {
   /// Returns all available enrolled of the signed in user
   Future<List<Course>> fetchUserEnrolledCourses() async {
     try {
-      _checkApi(_classroomApi);
-      final coursesResponse = await _classroomApi.courses.list(
-        studentId: 'me',
-      );
-      final courses = coursesResponse.courses;
-      _logMsg('fetched ${courses?.length} courses', 'fetchUserEnrolledCourses');
-      return courses;
+      final coursesResponse = await _classroomApi.courses.list(studentId: 'me');
+      return (coursesResponse.courses ?? []).where((course) => course.id != null && course.id!.isNotEmpty).toList();
     } catch (e) {
       _logErr('fetchUserCourses', e);
       rethrow;
@@ -481,35 +452,16 @@ class GsuiteService {
   /// Returns all CourseModels available for the signed in users
   Future<Map<dynamic, CourseModel>> fetchUserCourseModels() async {
     try {
+      if (_userEmail == null) throw Exception('User not authenticated, unable to make the request');
       final coursesTeaching = await fetchUserTeachingCourses();
       final coursesEnrolled = await fetchUserEnrolledCourses();
       final models = [
-        if (coursesTeaching != null)
-          ...coursesTeaching.map((course) => CourseModel(course: course, isTeacher: true, userId: _userEmail)),
-        if (coursesEnrolled != null)
-          ...coursesEnrolled.map((course) => CourseModel(course: course, isTeacher: false, userId: _userEmail)),
+        ...coursesTeaching.map((course) => CourseModel(course: course, isTeacher: true, userId: _userEmail!)),
+        ...coursesEnrolled.map((course) => CourseModel(course: course, isTeacher: false, userId: _userEmail!)),
       ];
 
-      //! Removed in favour of CourseModel fetching the roster itself upon request
-      /*
-      final futureGroup = FutureGroup<CourseModel>();
-      if (coursesTeaching != null && coursesTeaching.isNotEmpty) {
-        for (final course in coursesTeaching) {
-          futureGroup.add(fetchSingleUserCourseModel(null,course: course,isTeacher: true,));
-        }
-      }
-      if (coursesEnrolled != null && coursesEnrolled.isNotEmpty) {
-        for (final course in coursesEnrolled) {
-          futureGroup.add(fetchSingleUserCourseModel(null,course: course,isTeacher: false, ));
-        }
-      }
-      futureGroup.close();
-      final models = await futureGroup.future;
-      */
-
-      _logMsg('resolved ${(coursesTeaching?.length ?? 0) + (coursesEnrolled?.length ?? 0)} CourseModels',
-          'fetchUserCourseModels');
-      return models?.isNotEmpty != true
+      _logMsg('resolved ${(coursesTeaching.length) + (coursesEnrolled.length)} CourseModels', 'fetchUserCourseModels');
+      return models.isNotEmpty != true
           ? {}
           : models.asMap().map((key, courseModel) => MapEntry(courseModel.course.id, courseModel));
     } catch (e) {
@@ -519,13 +471,13 @@ class GsuiteService {
   }
 
   /// Returns a single course model if available for the signed in user
-  @Deprecated('Use fetchUserCourseModels or create a CourseModel from a single course using fetchSingleCourse')
   Future<CourseModel> fetchSingleUserCourseModel(
     String courseId, {
-    Course course,
-    bool isTeacher,
+    Course? course,
+    bool isTeacher = false,
   }) async {
     try {
+      if (_userEmail == null) throw Exception('User not authenticated, unable to make the request');
       final _course = course ?? await fetchSingleCourse(courseId);
       //= Return model without roster for enrolled courses
       if (isTeacher == false) {
@@ -533,20 +485,20 @@ class GsuiteService {
           course: _course,
           teachers: [],
           students: [],
-          userId: _userEmail,
+          userId: _userEmail!,
           isTeacher: isTeacher,
         );
       }
       final result = await Future.wait<List<UserProfile>>([
-        fetchCourseTeachers(courseId ?? course.id),
-        fetchCourseStudents(courseId ?? course.id),
+        fetchCourseTeachers(courseId),
+        fetchCourseStudents(courseId),
       ]);
 
       return CourseModel(
         course: _course,
         teachers: result[0],
         students: result[1],
-        userId: _userEmail,
+        userId: _userEmail!,
         isTeacher: isTeacher,
       );
     } catch (e) {
@@ -556,17 +508,21 @@ class GsuiteService {
   }
 
   /// Returns a single [Course] by its id
-  Future<Course> fetchSingleCourse(String id) async => _classroomApi.courses.get(id);
+  Future<Course> fetchSingleCourse(String id) async {
+    try {
+      return _classroomApi.courses.get(id);
+    } catch (e) {
+      _logErr('fetchSingleCourse', e);
+      rethrow;
+    }
+  }
 
   /// Returns a list of [UserProfile] of all students of the specified courseId
   /// * requires admin client
   Future<List<UserProfile>> fetchCourseStudents(String courseId) async {
     try {
-      _checkApi(_adminClassroomApi);
       final response = await _adminClassroomApi.courses.students.list(courseId);
-      return response == null || response.students == null
-          ? []
-          : response.students.map((student) => student.profile).toList();
+      return (response.students ?? []).map<UserProfile?>((student) => student.profile).toList().clean;
     } catch (e) {
       _logErr('fetchCourseStudents', e);
       rethrow;
@@ -577,9 +533,8 @@ class GsuiteService {
   /// * requires admin client
   Future<List<UserProfile>> fetchCourseTeachers(String courseId) async {
     try {
-      _checkApi(_adminClassroomApi);
       final response = await _adminClassroomApi.courses.teachers.list(courseId);
-      return response.teachers.map((teacher) => teacher.profile).toList();
+      return (response.teachers ?? []).map<UserProfile?>((teacher) => teacher.profile).toList().clean;
     } catch (e) {
       _logErr('fetchCourseTeachers', e);
       rethrow;
@@ -589,9 +544,8 @@ class GsuiteService {
   /// Returns the topics for a [courseId] that the user is permitted to view
   Future<List<Topic>> fetchCourseTopics(String courseId) async {
     try {
-      _checkApi(_classroomApi);
       final response = await _classroomApi.courses.topics.list(courseId);
-      return response.topic;
+      return response.topic ?? [];
     } catch (e) {
       _logErr('fetchCourseTopics', e);
       rethrow;
@@ -601,9 +555,8 @@ class GsuiteService {
   /// Returns the course announcements for a [courseId] that the user is permitted to view
   Future<List<Announcement>> fetchCourseAnnouncements(String courseId) async {
     try {
-      _checkApi(_classroomApi);
       final response = await _classroomApi.courses.announcements.list(courseId);
-      return response.announcements;
+      return response.announcements ?? [];
     } catch (e) {
       _logErr('fetchCourseAnnouncements', e);
       rethrow;
@@ -613,9 +566,8 @@ class GsuiteService {
   /// Returns the course work for a [courseId] that the user is permitted to view
   Future<List<CourseWork>> fetchCourseWorks(String courseId) async {
     try {
-      _checkApi(_classroomApi);
       final result = await _classroomApi.courses.courseWork.list(courseId);
-      return result.courseWork;
+      return result.courseWork ?? [];
     } catch (e) {
       _logErr('fetchCourseWorks', e);
       rethrow;
@@ -625,9 +577,8 @@ class GsuiteService {
   /// Returns the course work materials that the user is permitted to view for [courseId]
   Future<List<CourseWorkMaterial>> fetchCourseworkMaterials(String courseId) async {
     try {
-      _checkApi(_classroomApi);
       final result = await _classroomApi.courses.courseWorkMaterials.list(courseId);
-      return result.courseWorkMaterial;
+      return result.courseWorkMaterial ?? [];
     } catch (e) {
       _logErr('fetchCourseworkMaterials', e);
       rethrow;
@@ -648,15 +599,14 @@ class GsuiteService {
   Future<List<StudentSubmission>> fetchCourseworkSubmission(
     String courseId, [
     String courseWorkId = '-',
-    String userId,
+    String? userId,
   ]) async {
     try {
-      _checkApi(_classroomApi);
       final response = await _classroomApi.courses.courseWork.studentSubmissions.list(
         courseId,
         courseWorkId,
       );
-      return response.studentSubmissions;
+      return response.studentSubmissions ?? [];
     } catch (e) {
       _logErr('fetchCourseworkSubmission', e);
       rethrow;
@@ -666,9 +616,8 @@ class GsuiteService {
   /// Returns a list of invitations that the requesting user is permitted to view
   Future<List<Invitation>> fetchUserInvitations() async {
     try {
-      _checkApi(_classroomApi);
       final response = await _classroomApi.invitations.list(userId: 'me');
-      return response.invitations;
+      return response.invitations ?? [];
     } catch (e) {
       _logErr('fetchUserInvitations', e);
       rethrow;
@@ -677,7 +626,6 @@ class GsuiteService {
 
   Future<bool> acceptInvitation(String invitationId) async {
     try {
-      _checkApi(_classroomApi);
       final Empty response = await _classroomApi.invitations.accept(invitationId);
       return response is Empty;
     } catch (e) {
@@ -693,17 +641,16 @@ class GsuiteService {
   ///
   /// **Requires [client] with SuperAdmin privileges**
   Future<List<MeetEvent>> getMeetReport({
-    DateTime start,
-    DateTime end,
-    String userId,
+    DateTime? start,
+    DateTime? end,
+    String? userId,
   }) async {
     try {
-      _checkApi(_reportsApi);
-      final String startTime = start != null && start.isBefore(end)
+      final String startTime = start != null && start.isBefore(end!)
           ? start.toUtc().toIso8601String()
           : DateTime.now().subtract(const Duration(days: 7)).toUtc().toIso8601String();
       final String endTime =
-          end != null && end.isAfter(start) ? end.toUtc().toIso8601String() : DateTime.now().toUtc().toIso8601String();
+          end != null && end.isAfter(start!) ? end.toUtc().toIso8601String() : DateTime.now().toUtc().toIso8601String();
 
       final response = await _reportsApi.activities.list(
         'all',
@@ -714,28 +661,28 @@ class GsuiteService {
         endTime: endTime,
       );
 
-      if (response == null || response?.items == null || response.items.isEmpty) {
+      if (response.items == null || response.items!.isEmpty) {
         return [];
       }
 
       final List<MeetEvent> conferences = [];
 
-      for (final activity in response.items) {
+      for (final activity in response.items!) {
         // ignore activity items without callEndedEvent.conferenceId
-        if (activity.callEndedEvent == null || activity.callEndedEvent.conferenceId == null) continue;
+        if (activity.callEndedEvent == null || activity.callEndedEvent!.conferenceId == null) continue;
 
         // find activity's related MeetEvent
         int index = conferences.indexWhere(
-          (conference) => conference.conferenceId == activity.callEndedEvent.conferenceId,
+          (conference) => conference.conferenceId == activity.callEndedEvent!.conferenceId,
         );
 
         // if no MeetEvent found for the activity
         if (index == -1) {
           // add new MeetEvent
           conferences.add(MeetEvent(
-            conferenceId: activity.callEndedEvent.conferenceId,
-            organizerEmail: activity.callEndedEvent.organizerEmail,
-            meetingCode: activity.callEndedEvent.meetingCode,
+            conferenceId: activity.callEndedEvent!.conferenceId!,
+            organizerEmail: activity.callEndedEvent!.organizerEmail,
+            meetingCode: activity.callEndedEvent!.meetingCode,
           ));
           // set index to last item's index
           index = conferences.length - 1;
@@ -766,30 +713,14 @@ Future<AuthClient> getAccessClient(
   String serviceAccountJSONCredentials,
   String userEmail,
 ) async {
-  if (userEmail == null) {
-    throw Exception(
-      'Google Authorization Failure: email cannot be null',
-    );
-  }
-  if (serviceAccountJSONCredentials == null) {
-    throw Exception(
-      'Google Authorization Failure: JSON credentials cannot be null',
-    );
-  }
   try {
-    final AuthClient client = await clientViaServiceAccount(
+    return await clientViaServiceAccount(
       ServiceAccountCredentials.fromJson(
         serviceAccountJSONCredentials,
         impersonatedUser: userEmail,
       ),
       SCOPES,
     );
-    if (client == null) {
-      throw Exception(
-        'Google Authorization Failure: client could not be resolved',
-      );
-    }
-    return client;
   } catch (err) {
     _logMsg('error', 'getAccessClient', err);
     rethrow;
