@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class NameAdapter extends TypeAdapter<Name> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_NAME;
+  int get typeId => _typeId;
+
+  NameAdapter([this._typeId = TYPE_ID_NAME]);
 
   @override
   Name read(BinaryReader reader) {
@@ -37,8 +40,5 @@ class NameAdapter extends TypeAdapter<Name> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is NameAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is NameAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

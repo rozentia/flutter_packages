@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class MaterialAdapter extends TypeAdapter<Material> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_MATERIAL;
+  int get typeId => _typeId;
+
+  MaterialAdapter([this._typeId = TYPE_ID_MATERIAL]);
 
   @override
   Material read(BinaryReader reader) {

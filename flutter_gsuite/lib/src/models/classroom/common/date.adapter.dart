@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class DateAdapter extends TypeAdapter<Date> {
+  final int _typeId;
+  DateAdapter([this._typeId = TYPE_ID_DATE]);
+
   @override
-  final int typeId = TYPE_ID_DATE;
+  int get typeId => _typeId;
 
   @override
   Date read(BinaryReader reader) {
@@ -38,8 +41,5 @@ class DateAdapter extends TypeAdapter<Date> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DateAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is DateAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

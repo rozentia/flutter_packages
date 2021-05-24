@@ -11,6 +11,9 @@ class AggregatedCourseWork {
     this.studentSubmissions,
   });
 
+  /// Coursework Id
+  String? get courseWorkId => courseWork?.id;
+
   factory AggregatedCourseWork.fromCourseWork(
     Topic? topic,
     CourseWork courseWork,
@@ -20,4 +23,15 @@ class AggregatedCourseWork {
           topic: topic,
           courseWork: courseWork,
           studentSubmissions: allSubmissions.where((submission) => submission.courseWorkId == courseWork.id).toList());
+}
+
+extension ExtendedAggregatedCourseWork on Iterable<AggregatedCourseWork> {
+  Map<String, Iterable<AggregatedCourseWork>> get sortedByCourseWork =>
+      where((aggregatedCourseWork) => aggregatedCourseWork.courseWorkId != null)
+          .fold<List<String>>([], (prev, curr) => [...prev, curr.courseWorkId!])
+          .toSet()
+          .toList()
+          .asMap()
+          .map<String, Iterable<AggregatedCourseWork>>((key, value) =>
+              MapEntry(value, where((aggregatedCourseWork) => aggregatedCourseWork.courseWorkId! == value)));
 }

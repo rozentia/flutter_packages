@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class AttachmentAdapter extends TypeAdapter<Attachment> {
+  final int _typeId;
+  AttachmentAdapter([this._typeId = TYPE_ID_ATTACHMENT]);
+
   @override
-  final int typeId = TYPE_ID_ATTACHMENT;
+  int get typeId => _typeId;
 
   @override
   Attachment read(BinaryReader reader) {
@@ -42,7 +45,5 @@ class AttachmentAdapter extends TypeAdapter<Attachment> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AttachmentAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AttachmentAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

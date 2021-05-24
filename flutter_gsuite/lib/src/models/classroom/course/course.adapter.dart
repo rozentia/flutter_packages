@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class CourseAdapter extends TypeAdapter<Course> {
+  final int _typeId;
+  CourseAdapter([this._typeId = TYPE_ID_COURSE]);
+
   @override
-  final int typeId = TYPE_ID_COURSE;
+  int get typeId => _typeId;
 
   @override
   Course read(BinaryReader reader) {
@@ -73,8 +76,5 @@ class CourseAdapter extends TypeAdapter<Course> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CourseAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is CourseAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

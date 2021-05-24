@@ -33,9 +33,9 @@ extension CourseModelExtensions on Iterable<CourseModel> {
       .map((key, model) =>
           MapEntry(model.courseId, (model.courseWorkSubmissions ?? emptySubmissionList).pendingSubmissions));
 
-  /// Returns all reviewable submissions accross all teaching courses
-  List<StudentSubmission> get allReviewableSubmissions =>
-      teachingCourses.fold<List<StudentSubmission>>([], (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []]);
+  /// Returns all reviewable (pending) submissions accross all teaching courses
+  List<StudentSubmission> get allReviewableSubmissions => teachingCourses.fold<List<StudentSubmission>>(
+      [], (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []]).pendingReviewSubmissions;
 
   /// Returns all reviewed submissions accross all teaching courses
   List<StudentSubmission> get allReviewedSubmissions => allReviewableSubmissions.completedSubmissions;
@@ -48,13 +48,9 @@ extension CourseModelExtensions on Iterable<CourseModel> {
   /// Return the list of enrolled courses
   Iterable<CourseModel> get enrolledCourses => where((model) => !model.isTeacher);
 
-  /// Returns the assignments not yet turned in organized by courseId
-  Map<String, List<StudentSubmission>> get pendingSubmissions => enrolledCourses
-      .where((model) => model.courseWorkSubmissions?.pendingSubmissions.isNotEmpty == true)
-      .toList()
-      .asMap()
-      .map((key, model) =>
-          MapEntry(model.courseId, (model.courseWorkSubmissions ?? emptySubmissionList).pendingSubmissions));
+  /// Returns all reviewable (pending) submissions accross all teaching courses
+  List<StudentSubmission> get allPendingSubmissions => enrolledCourses.fold<List<StudentSubmission>>(
+      [], (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []]).pendingSubmissions;
 
   /// Returns all assignement submissions accross all enrolled courses
   List<StudentSubmission> get allAssignmentSubmissions =>
@@ -84,6 +80,16 @@ extension ExtendedCourseWorkSubmissionList on List<StudentSubmission> {
   /// TURNED_IN: Has been turned in to the teacher.
   List<StudentSubmission> get pendingReviewSubmissions =>
       where((submission) => submission.state == 'TURNED_IN').toList();
+
+  /// Returns a map representation of the list where keys are courseWorkId and values
+  /// are the list of submissions of that courseWorkId
+  Map<String, List<StudentSubmission>> get sortedByCourseWork => where((e) => e.courseWorkId != null)
+      .map<String>((e) => e.courseWorkId!)
+      .toSet()
+      .toList()
+      .asMap()
+      .map((key, value) => MapEntry(value, where((s) => s.courseWorkId == value).toList()))
+        ..removeWhere((key, value) => value.isEmpty);
 
   /// Completed submissions percentage
   int get percentCompleted => ((completedSubmissions.length / length) * 100).round();

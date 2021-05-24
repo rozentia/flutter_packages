@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../constants/hive_constants.dart';
 
 class CalendarListEntryAdapter extends TypeAdapter<CalendarListEntry> {
+  final int _typeId;
+  CalendarListEntryAdapter([this._typeId = TYPE_ID_CALENDAR]);
+
   @override
-  int get typeId => TYPE_ID_CALENDAR;
+  int get typeId => _typeId;
 
   @override
   CalendarListEntry read(BinaryReader reader) {
@@ -68,7 +71,5 @@ class CalendarListEntryAdapter extends TypeAdapter<CalendarListEntry> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CalendarListEntryAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CalendarListEntryAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

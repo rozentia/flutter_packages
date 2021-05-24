@@ -1,10 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
+import '../../../constants/hive_constants.dart';
+
 class ShortAnswerSubmissionAdapter extends TypeAdapter<ShortAnswerSubmission> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_SHORT_ANSWER_SUBMISSION;
+  int get typeId => _typeId;
+
+  ShortAnswerSubmissionAdapter([this._typeId = TYPE_ID_SHORT_ANSWER_SUBMISSION]);
 
   @override
   ShortAnswerSubmission read(BinaryReader reader) {
@@ -32,7 +36,5 @@ class ShortAnswerSubmissionAdapter extends TypeAdapter<ShortAnswerSubmission> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ShortAnswerSubmissionAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is ShortAnswerSubmissionAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

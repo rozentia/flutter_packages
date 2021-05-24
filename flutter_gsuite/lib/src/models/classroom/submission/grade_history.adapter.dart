@@ -1,10 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
+import '../../../constants/hive_constants.dart';
+
 class GradeHistoryAdapter extends TypeAdapter<GradeHistory> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_GRADE_HISTORY;
+  int get typeId => _typeId;
+
+  GradeHistoryAdapter([this._typeId = TYPE_ID_GRADE_HISTORY]);
 
   @override
   GradeHistory read(BinaryReader reader) {
@@ -44,7 +48,5 @@ class GradeHistoryAdapter extends TypeAdapter<GradeHistory> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GradeHistoryAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is GradeHistoryAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

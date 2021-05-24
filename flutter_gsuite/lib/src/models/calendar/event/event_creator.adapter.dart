@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class EventCreatorAdapter extends TypeAdapter<EventCreator> {
+  final int _typeId;
+  EventCreatorAdapter([this._typeId = TYPE_ID_EVENT_CREATOR]);
+
   @override
-  int get typeId => TYPE_ID_EVENT_CREATOR;
+  int get typeId => _typeId;
 
   @override
   EventCreator read(BinaryReader reader) {
@@ -42,7 +45,5 @@ class EventCreatorAdapter extends TypeAdapter<EventCreator> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is EventCreatorAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is EventCreatorAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

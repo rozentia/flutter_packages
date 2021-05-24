@@ -1,10 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
+import '../../../constants/hive_constants.dart';
+
 class FormMaterialAdapter extends TypeAdapter<Form> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_FORM_MATERIAL;
+  int get typeId => _typeId;
+
+  FormMaterialAdapter([this._typeId = TYPE_ID_FORM_MATERIAL]);
 
   @override
   Form read(BinaryReader reader) {
@@ -41,7 +45,5 @@ class FormMaterialAdapter extends TypeAdapter<Form> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormMaterialAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is FormMaterialAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

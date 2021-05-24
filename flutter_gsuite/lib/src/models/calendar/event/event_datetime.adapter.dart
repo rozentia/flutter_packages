@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class EventDateTimeAdapter extends TypeAdapter<EventDateTime> {
+  final int _typeId;
+  EventDateTimeAdapter([this._typeId = TYPE_ID_EVENT_DATETIME]);
+
   @override
-  int get typeId => TYPE_ID_EVENT_DATETIME;
+  int get typeId => _typeId;
 
   @override
   EventDateTime read(BinaryReader reader) {
@@ -39,7 +42,5 @@ class EventDateTimeAdapter extends TypeAdapter<EventDateTime> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is EventDateTimeAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is EventDateTimeAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

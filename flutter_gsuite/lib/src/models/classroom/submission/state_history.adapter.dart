@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class StateHistoryAdapter extends TypeAdapter<StateHistory> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_STATE_HISTORY;
+  int get typeId => _typeId;
+
+  StateHistoryAdapter([this._typeId = TYPE_ID_STATE_HISTORY]);
 
   @override
   StateHistory read(BinaryReader reader) {
@@ -39,7 +42,5 @@ class StateHistoryAdapter extends TypeAdapter<StateHistory> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StateHistoryAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is StateHistoryAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

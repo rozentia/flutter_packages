@@ -1,10 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
+import '../../../constants/hive_constants.dart';
+
 class CourseMaterialAdapter extends TypeAdapter<CourseMaterial> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_COURSE_MATERIAL;
+  int get typeId => _typeId;
+
+  CourseMaterialAdapter([this._typeId = TYPE_ID_COURSE_MATERIAL]);
 
   @override
   CourseMaterial read(BinaryReader reader) {
@@ -40,7 +44,5 @@ class CourseMaterialAdapter extends TypeAdapter<CourseMaterial> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CourseMaterialAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CourseMaterialAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

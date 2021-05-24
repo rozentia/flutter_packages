@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class TimeOfDayAdapter extends TypeAdapter<TimeOfDay> {
+  final int _typeId;
+  TimeOfDayAdapter([this._typeId = TYPE_ID_TIME_OF_DAY]);
+
   @override
-  final int typeId = TYPE_ID_TIME_OF_DAY;
+  int get typeId => _typeId;
 
   @override
   TimeOfDay read(BinaryReader reader) {
@@ -41,8 +44,5 @@ class TimeOfDayAdapter extends TypeAdapter<TimeOfDay> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TimeOfDayAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is TimeOfDayAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

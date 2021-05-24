@@ -1,10 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
+import '../../../constants/hive_constants.dart';
+
 class DriveFileAdapter extends TypeAdapter<DriveFile> {
+  final int _typeId;
+  DriveFileAdapter([this._typeId = TYPE_ID_DRIVE_FILE]);
+
   @override
-  final int typeId = TYPE_ID_DRIVE_FILE;
+  int get typeId => _typeId;
 
   @override
   DriveFile read(BinaryReader reader) {
@@ -39,8 +43,5 @@ class DriveFileAdapter extends TypeAdapter<DriveFile> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DriveFileAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is DriveFileAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

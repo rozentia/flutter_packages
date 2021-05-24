@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class MultipleChoiceQuestionAdapter extends TypeAdapter<MultipleChoiceQuestion> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_MULTIPLE_CHOICE_QUESTION;
+  int get typeId => _typeId;
+
+  MultipleChoiceQuestionAdapter([this._typeId = TYPE_ID_MULTIPLE_CHOICE_QUESTION]);
 
   @override
   MultipleChoiceQuestion read(BinaryReader reader) {

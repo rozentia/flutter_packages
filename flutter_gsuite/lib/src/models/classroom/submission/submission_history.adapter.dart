@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class SubmissionHistoryAdapter extends TypeAdapter<SubmissionHistory> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_SUBMISSION_HISTORY;
+  int get typeId => _typeId;
+
+  SubmissionHistoryAdapter([this._typeId = TYPE_ID_SUBMISSION_HISTORY]);
 
   @override
   SubmissionHistory read(BinaryReader reader) {
@@ -36,7 +39,5 @@ class SubmissionHistoryAdapter extends TypeAdapter<SubmissionHistory> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SubmissionHistoryAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is SubmissionHistoryAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

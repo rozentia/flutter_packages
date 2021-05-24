@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class AssignmentAdapter extends TypeAdapter<Assignment> {
+  final int _typeId;
+  AssignmentAdapter([this._typeId = TYPE_ID_ASSIGNMENT]);
+
   @override
-  final int typeId = TYPE_ID_ASSIGNMENT;
+  int get typeId => _typeId;
 
   @override
   Assignment read(BinaryReader reader) {
@@ -32,7 +35,5 @@ class AssignmentAdapter extends TypeAdapter<Assignment> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AssignmentAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AssignmentAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

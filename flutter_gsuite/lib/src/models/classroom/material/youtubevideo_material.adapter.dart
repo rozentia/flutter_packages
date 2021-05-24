@@ -1,10 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
+import '../../../constants/hive_constants.dart';
+
 class YouTubeVideoMaterialAdapter extends TypeAdapter<YouTubeVideo> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_YOUTUBEVIDEO_MATERIAL;
+  int get typeId => _typeId;
+
+  YouTubeVideoMaterialAdapter([this._typeId = TYPE_ID_YOUTUBEVIDEO_MATERIAL]);
 
   @override
   YouTubeVideo read(BinaryReader reader) {
@@ -40,7 +44,5 @@ class YouTubeVideoMaterialAdapter extends TypeAdapter<YouTubeVideo> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is YouTubeVideoMaterialAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is YouTubeVideoMaterialAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

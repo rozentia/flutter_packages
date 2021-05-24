@@ -1,11 +1,14 @@
-import '../../../constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
 
-class MultipleChoiceSubmissionAdapter
-    extends TypeAdapter<MultipleChoiceSubmission> {
+import '../../../constants/hive_constants.dart';
+
+class MultipleChoiceSubmissionAdapter extends TypeAdapter<MultipleChoiceSubmission> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_MULTIPLE_CHOICE_SUBMISSION;
+  int get typeId => _typeId;
+
+  MultipleChoiceSubmissionAdapter([this._typeId = TYPE_ID_MULTIPLE_CHOICE_SUBMISSION]);
 
   @override
   MultipleChoiceSubmission read(BinaryReader reader) {
@@ -33,7 +36,5 @@ class MultipleChoiceSubmissionAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MultipleChoiceSubmissionAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is MultipleChoiceSubmissionAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

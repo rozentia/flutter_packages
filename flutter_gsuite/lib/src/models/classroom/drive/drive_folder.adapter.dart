@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class DriveFolderAdapter extends TypeAdapter<DriveFolder> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_DRIVE_FOLDER;
+  int get typeId => _typeId;
+
+  DriveFolderAdapter([this._typeId = TYPE_ID_DRIVE_FOLDER]);
 
   @override
   DriveFolder read(BinaryReader reader) {
@@ -38,7 +41,5 @@ class DriveFolderAdapter extends TypeAdapter<DriveFolder> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DriveFolderAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is DriveFolderAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

@@ -8,6 +8,7 @@ import 'package:quiver/iterables.dart';
 import '../../../constants/constants.dart';
 import '../../../constants/hive_constants.dart';
 import 'aggregated_coursework.dart';
+import 'course_model.extensions.dart';
 
 part 'course_model.m.g.dart';
 
@@ -49,27 +50,36 @@ class CourseModel extends HiveObject {
     this.courseWorkSubmissions = const [],
   });
 
+  //-                                                                              Getters
+
   /// The id of the course this model referes to or null if the model is empty
   String get courseId => course.id!;
 
   /// The name of the course (if course had no name it will return 'Untitled course')
   String get name => course.name ?? 'Untitled course';
 
-  Map<String?, List<AggregatedCourseWork>> get sortedAggregatedCourseWorks => topics!.asMap().map(
-        (key, topic) => MapEntry(
-          topic.topicId,
-          courseWorks!
-              .where((courseWork) => courseWork.topicId == topic.topicId)
-              .map<AggregatedCourseWork>(
-                (courseWork) => AggregatedCourseWork.fromCourseWork(
-                  topic,
-                  courseWork,
-                  courseWorkSubmissions!,
-                ),
-              )
-              .toList(),
-        ),
-      );
+  /// Returns a map where keys are with a list of StudentSubmissions for each CourseWorkId
+  Map<String, List<StudentSubmission>> get submissions =>
+      courseWorkSubmissions == null ? {} : courseWorkSubmissions!.sortedByCourseWork;
+
+  Map<String, List<AggregatedCourseWork>> get sortedAggregatedCourseWorks =>
+      (topics ?? []).where((topic) => topic.topicId != null).toList().asMap().map(
+            (key, topic) => MapEntry(
+              topic.topicId!,
+              courseWorks!
+                  .where((courseWork) => courseWork.topicId == topic.topicId)
+                  .map<AggregatedCourseWork>(
+                    (courseWork) => AggregatedCourseWork.fromCourseWork(
+                      topic,
+                      courseWork,
+                      courseWorkSubmissions ?? [],
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
+
+  /// Returns all CourseWorkMaterial organized by Topic
   Map<String?, List<CourseWorkMaterial>> get sortedCourseWorkMaterials => topics!.asMap().map((key, topic) => MapEntry(
         topic.topicId,
         courseWorkMaterials!.where((material) => material.topicId == topic.topicId).toList(),
@@ -97,6 +107,8 @@ class CourseModel extends HiveObject {
           ]).toList()
         });
 
+  //-                                                                            Functions
+
   /// Return a user by its [userIdOrEmailOrFullName] or null if not found
   UserProfile? findRosterUser(String userIdOrEmailOrFullName,
           {bool excludeStudents = false, bool excludeTeachers = true}) =>
@@ -109,9 +121,14 @@ class CourseModel extends HiveObject {
                   user.name!.fullName == userIdOrEmailOrFullName,
               orElse: () => null);
 
+  /// Returns the topic by tis [topicIdOrName] or null if not found
   Topic? findCourseTopic(String topicIdOrName) => topics!.firstWhereOrNull(
         (topic) => topic.topicId == topicIdOrName || topic.name == topicIdOrName,
       );
+
+  /// Returns the course work for [courseWorkId] or null if not found
+  CourseWork? findCourseWork(String courseWorkId) =>
+      courseWorks?.firstWhereOrNull((courseWork) => courseWork.id == courseWorkId);
 
   /// Returns either the [data] provided or the resolved [dataFuture] or null if either is null
   Future<T?> _dataOr<T>(T data, Future<T>? dataFuture) async {
@@ -123,6 +140,8 @@ class CourseModel extends HiveObject {
     }
   }
 
+  /// Fill/replaces and saves the the profiles in students and teachers with either the [studentsInput] and [teachersInput]
+  /// of the results of the [studentsFuture] and the [teachersFuture]
   Future<void> updateRoster({
     List<UserProfile>? studentsInput,
     List<UserProfile>? teachersInput,
@@ -141,6 +160,7 @@ class CourseModel extends HiveObject {
     }
   }
 
+  /// Fill/replaces and saves the course announcements with either the [input] provided or the results of the [future]
   Future<void> updateAnnouncements({
     List<Announcement>? input,
     Future<List<Announcement>>? future,
@@ -152,6 +172,7 @@ class CourseModel extends HiveObject {
     }
   }
 
+  /// Fill/replaces and saves the course topics with either the [input] provided or the results of the [future]
   Future<void> updateCourseTopics({
     List<Topic>? input,
     Future<List<Topic>>? future,
@@ -163,6 +184,7 @@ class CourseModel extends HiveObject {
     }
   }
 
+  /// Fill/replaces and saves the the courseWorks of the course either with the [input] provided or the results of the [future]
   Future<void> updateCourseworks({
     List<CourseWork>? input,
     Future<List<CourseWork>>? future,
@@ -174,6 +196,7 @@ class CourseModel extends HiveObject {
     }
   }
 
+  /// Fill/replaces and saves the the courseworkMaterials of the course either with the [input] provided or the results of the [future]
   Future<void> updateCourseworkMaterials({
     List<CourseWorkMaterial>? input,
     Future<List<CourseWorkMaterial>>? future,
@@ -185,6 +208,7 @@ class CourseModel extends HiveObject {
     }
   }
 
+  /// Fill/replaces and saves the the courseworkSubmissions of the cours eeither with the [input] provided or the results of the [future]
   Future<void> updateCourseworkSubmission({
     List<StudentSubmission>? input,
     Future<List<StudentSubmission>>? future,

@@ -4,8 +4,11 @@ import 'package:hive/hive.dart';
 import '../../../constants/hive_constants.dart';
 
 class CourseWorkAdapter extends TypeAdapter<CourseWork> {
+  final int _typeId;
   @override
-  final int typeId = TYPE_ID_COURSE_WORK;
+  int get typeId => _typeId;
+
+  CourseWorkAdapter([this._typeId = TYPE_ID_COURSE_WORK]);
 
   @override
   CourseWork read(BinaryReader reader) {
