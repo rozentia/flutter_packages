@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
-import 'package:googleapis/admin/directory_v1.dart';
+import 'package:googleapis/admin/directory_v1.dart' hide Empty;
 import 'package:googleapis/admin/reports_v1.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';

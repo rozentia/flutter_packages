@@ -12,10 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
   shared_extensions:
-    path: /Users/potter/Developer/Projects/Flutter/packages/shared_extensions
+    path: /Users/potter/Developer/Projects/Packages/Flutter/packages/shared_extensions
   dartz: ^0.10.0-nullsafety.1
   freezed_annotation: ^0.14.1
-  googleapis: ^2.0.0
+  googleapis: ^5.0.1
   googleapis_auth: ^1.0.0
   hive: ^2.0.2
   quiver: ^3.0.0
@@ -24,7 +24,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.11.5
+  build_runner: ^2.1.2
   freezed: ^0.14.1
   hive_generator: ^1.0.1
   lint: ^1.5.3
