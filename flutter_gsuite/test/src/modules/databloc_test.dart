@@ -16,12 +16,9 @@ void main() {
       expect(value.isEmpty, true);
       expect(value, valueAfter);
     });
-    test(
-        'should create a DataBloc with initial values and no fetchMore function',
-        () {
+    test('should create a DataBloc with initial values and no fetchMore function', () {
       //= arrange
-      final prefilledDataBloc =
-          DataBloc<String>(initialData: initialTestValues);
+      final prefilledDataBloc = DataBloc<String>(initialData: initialTestValues);
       //= act
       final values = prefilledDataBloc.valueList;
       prefilledDataBloc.fetchMore();
@@ -31,8 +28,7 @@ void main() {
       expect(values.isNotEmpty, true);
       expect(values, valuesAfter);
     });
-    test('should create a DataBloc and react when fetch more is called',
-        () async {
+    test('should create a DataBloc and react when fetch more is called', () async {
       //= arrange
       final prefilledReactiveDataBloc = DataBloc(
         initialData: initialTestValues,
@@ -44,8 +40,10 @@ void main() {
       final valuesAfter1 = prefilledReactiveDataBloc.valueList.toList();
       //= assert
       expect(values.length, initialTestValues.length);
-      expect(valuesAfter1.length,
-          initialTestValues.length + injectedTestValues.length);
+      expect(
+        valuesAfter1.length,
+        initialTestValues.length + injectedTestValues.length,
+      );
       expect(valuesAfter1.last, injectedTestValues.last);
     });
   });

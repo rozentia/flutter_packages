@@ -58,46 +58,74 @@ void registerAdapters(
   // int courseModel = TYPE_ID_COURSE_MODEL,
 }) {
   //= Common
-  hive.registerAdapter<TimeOfDay>(TimeOfDayAdapter(timeOfDay));
-  hive.registerAdapter<Name>(NameAdapter(name));
-  hive.registerAdapter<User>(UserAdapter(user));
-  hive.registerAdapter<Date>(DateAdapter(date));
-  hive.registerAdapter<Topic>(TopicAdapter(topic));
-  hive.registerAdapter<UserProfile>(UserProfileAdapter(userProfile));
-  hive.registerAdapter<UserName>(UserNameAdapter(userName));
+  if (!hive.isAdapterRegistered(timeOfDay)) hive.registerAdapter<TimeOfDay>(TimeOfDayAdapter(timeOfDay));
+  if (!hive.isAdapterRegistered(name)) hive.registerAdapter<Name>(NameAdapter(name));
+  if (!hive.isAdapterRegistered(user)) hive.registerAdapter<User>(UserAdapter(user));
+  if (!hive.isAdapterRegistered(date)) hive.registerAdapter<Date>(DateAdapter(date));
+  if (!hive.isAdapterRegistered(topic)) hive.registerAdapter<Topic>(TopicAdapter(topic));
+  if (!hive.isAdapterRegistered(userProfile)) hive.registerAdapter<UserProfile>(UserProfileAdapter(userProfile));
+  if (!hive.isAdapterRegistered(userName)) hive.registerAdapter<UserName>(UserNameAdapter(userName));
 
   //= Calendar
-  hive.registerAdapter<CalendarListEntry>(CalendarListEntryAdapter(calendarListEntry));
-  hive.registerAdapter<EventDateTime>(EventDateTimeAdapter(eventDatetime));
-  hive.registerAdapter<EventCreator>(EventCreatorAdapter(eventCreator));
+  if (!hive.isAdapterRegistered(calendarListEntry)) {
+    hive.registerAdapter<CalendarListEntry>(CalendarListEntryAdapter(calendarListEntry));
+  }
+  if (!hive.isAdapterRegistered(eventDatetime)) {
+    hive.registerAdapter<EventDateTime>(EventDateTimeAdapter(eventDatetime));
+  }
+  if (!hive.isAdapterRegistered(eventCreator)) hive.registerAdapter<EventCreator>(EventCreatorAdapter(eventCreator));
   hive.registerAdapter<CalendarEvent>(CalendarEventAdapter());
-  hive.registerAdapter<Event>(EventAdapter(event));
+  if (!hive.isAdapterRegistered(event)) hive.registerAdapter<Event>(EventAdapter(event));
 
   //= Classroom
 
-  hive.registerAdapter<Attachment>(AttachmentAdapter(attachment));
-  hive.registerAdapter<DriveFile>(DriveFileAdapter(driveFile));
-  hive.registerAdapter<IndividualStudentsOptions>(IndividualStudentsOptionsAdapter(individualStudentOptions));
-  hive.registerAdapter<DriveFolder>(DriveFolderAdapter(driveFolder));
-  hive.registerAdapter<Link>(LinkMaterialAdapter(linkMaterial));
-  hive.registerAdapter<Form>(FormMaterialAdapter(formMaterial));
-  hive.registerAdapter<YouTubeVideo>(YouTubeVideoMaterialAdapter(youtubeVideoMaterial));
-  hive.registerAdapter<SharedDriveFile>(SharedDriveFileAdapter(sharedDriveFile));
-  hive.registerAdapter<Material>(MaterialAdapter(material));
-  hive.registerAdapter<Assignment>(AssignmentAdapter(assignment));
-  hive.registerAdapter<MultipleChoiceQuestion>(MultipleChoiceQuestionAdapter(multipleChoiceQuestion));
-  hive.registerAdapter<MultipleChoiceSubmission>(MultipleChoiceSubmissionAdapter(multipleChoiceSubmission));
-  hive.registerAdapter<CourseMaterial>(CourseMaterialAdapter(courseMaterial));
-  hive.registerAdapter<CourseWorkMaterial>(CourseWorkMaterialAdapter(courseWorkMaterial));
-  hive.registerAdapter<CourseMaterialSet>(CourseMaterialSetAdapter(courseMaterial));
-  hive.registerAdapter<ShortAnswerSubmission>(ShortAnswerSubmissionAdapter(shortAnswerSubmission));
-  hive.registerAdapter<GradeHistory>(GradeHistoryAdapter(gradeHistory));
-  hive.registerAdapter<StateHistory>(StateHistoryAdapter(stateHistory));
-  hive.registerAdapter<SubmissionHistory>(SubmissionHistoryAdapter(submissionHistory));
-  hive.registerAdapter<CourseWork>(CourseWorkAdapter(courseWork));
-  hive.registerAdapter<Course>(CourseAdapter(course));
-  hive.registerAdapter<Announcement>(AnnouncementAdapter(announcement));
-  hive.registerAdapter<AssignmentSubmission>(AssignmentSubmissionAdapter(assignmentSubmission));
-  hive.registerAdapter<StudentSubmission>(StudentSubmissionAdapter(studentSubmission));
+  if (!hive.isAdapterRegistered(attachment)) hive.registerAdapter<Attachment>(AttachmentAdapter(attachment));
+  if (!hive.isAdapterRegistered(driveFile)) hive.registerAdapter<DriveFile>(DriveFileAdapter(driveFile));
+  if (!hive.isAdapterRegistered(individualStudentOptions)) {
+    hive.registerAdapter<IndividualStudentsOptions>(IndividualStudentsOptionsAdapter(individualStudentOptions));
+  }
+  if (!hive.isAdapterRegistered(driveFolder)) hive.registerAdapter<DriveFolder>(DriveFolderAdapter(driveFolder));
+  if (!hive.isAdapterRegistered(linkMaterial)) hive.registerAdapter<Link>(LinkMaterialAdapter(linkMaterial));
+  if (!hive.isAdapterRegistered(formMaterial)) hive.registerAdapter<Form>(FormMaterialAdapter(formMaterial));
+  if (!hive.isAdapterRegistered(youtubeVideoMaterial)) {
+    hive.registerAdapter<YouTubeVideo>(YouTubeVideoMaterialAdapter(youtubeVideoMaterial));
+  }
+  if (!hive.isAdapterRegistered(sharedDriveFile)) {
+    hive.registerAdapter<SharedDriveFile>(SharedDriveFileAdapter(sharedDriveFile));
+  }
+  if (!hive.isAdapterRegistered(material)) hive.registerAdapter<Material>(MaterialAdapter(material));
+  if (!hive.isAdapterRegistered(assignment)) hive.registerAdapter<Assignment>(AssignmentAdapter(assignment));
+  if (!hive.isAdapterRegistered(multipleChoiceQuestion)) {
+    hive.registerAdapter<MultipleChoiceQuestion>(MultipleChoiceQuestionAdapter(multipleChoiceQuestion));
+  }
+  if (!hive.isAdapterRegistered(multipleChoiceSubmission)) {
+    hive.registerAdapter<MultipleChoiceSubmission>(MultipleChoiceSubmissionAdapter(multipleChoiceSubmission));
+  }
+  if (!hive.isAdapterRegistered(courseMaterial)) {
+    hive.registerAdapter<CourseMaterial>(CourseMaterialAdapter(courseMaterial));
+  }
+  if (!hive.isAdapterRegistered(courseMaterialSet)) {
+    hive.registerAdapter<CourseWorkMaterial>(CourseWorkMaterialAdapter(courseWorkMaterial));
+  }
+  if (!hive.isAdapterRegistered(courseMaterial)) {
+    hive.registerAdapter<CourseMaterialSet>(CourseMaterialSetAdapter(courseMaterial));
+  }
+  if (!hive.isAdapterRegistered(shortAnswerSubmission)) {
+    hive.registerAdapter<ShortAnswerSubmission>(ShortAnswerSubmissionAdapter(shortAnswerSubmission));
+  }
+  if (!hive.isAdapterRegistered(gradeHistory)) hive.registerAdapter<GradeHistory>(GradeHistoryAdapter(gradeHistory));
+  if (!hive.isAdapterRegistered(stateHistory)) hive.registerAdapter<StateHistory>(StateHistoryAdapter(stateHistory));
+  if (!hive.isAdapterRegistered(submissionHistory)) {
+    hive.registerAdapter<SubmissionHistory>(SubmissionHistoryAdapter(submissionHistory));
+  }
+  if (!hive.isAdapterRegistered(courseWork)) hive.registerAdapter<CourseWork>(CourseWorkAdapter(courseWork));
+  if (!hive.isAdapterRegistered(course)) hive.registerAdapter<Course>(CourseAdapter(course));
+  if (!hive.isAdapterRegistered(announcement)) hive.registerAdapter<Announcement>(AnnouncementAdapter(announcement));
+  if (!hive.isAdapterRegistered(assignmentSubmission)) {
+    hive.registerAdapter<AssignmentSubmission>(AssignmentSubmissionAdapter(assignmentSubmission));
+  }
+  if (!hive.isAdapterRegistered(studentSubmission)) {
+    hive.registerAdapter<StudentSubmission>(StudentSubmissionAdapter(studentSubmission));
+  }
   hive.registerAdapter<CourseModel>(CourseModelAdapter());
 }

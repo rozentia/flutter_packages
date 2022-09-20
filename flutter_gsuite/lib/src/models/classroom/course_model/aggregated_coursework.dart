@@ -20,9 +20,10 @@ class AggregatedCourseWork {
     List<StudentSubmission> allSubmissions,
   ) =>
       AggregatedCourseWork(
-          topic: topic,
-          courseWork: courseWork,
-          studentSubmissions: allSubmissions.where((submission) => submission.courseWorkId == courseWork.id).toList());
+        topic: topic,
+        courseWork: courseWork,
+        studentSubmissions: allSubmissions.where((submission) => submission.courseWorkId == courseWork.id).toList(),
+      );
 }
 
 extension ExtendedAggregatedCourseWork on Iterable<AggregatedCourseWork> {
@@ -32,6 +33,8 @@ extension ExtendedAggregatedCourseWork on Iterable<AggregatedCourseWork> {
           .toSet()
           .toList()
           .asMap()
-          .map<String, Iterable<AggregatedCourseWork>>((key, value) =>
-              MapEntry(value, where((aggregatedCourseWork) => aggregatedCourseWork.courseWorkId! == value)));
+          .map<String, Iterable<AggregatedCourseWork>>(
+            (key, value) =>
+                MapEntry(value, where((aggregatedCourseWork) => aggregatedCourseWork.courseWorkId! == value)),
+          );
 }

@@ -1,4 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
+
+import '../course/course.extensions.dart';
 import 'package:googleapis/classroom/v1.dart';
 
 import 'course_model.m.dart';
@@ -19,23 +21,46 @@ extension CourseModelExtensions on Iterable<CourseModel> {
           null
       : false;
 
+  //-                                                           Common
+
+  /// Returns all active courses
+  Iterable<CourseModel> get activeCourses => where(
+        (model) => model.course.status.maybeWhen<bool>(
+          active: () => true,
+          orElse: () => false,
+        ),
+      );
+
+  /// Returns all archived courses
+  Iterable<CourseModel> get archivedCourses => where(
+        (model) => model.course.status.maybeWhen<bool>(
+          archived: () => true,
+          orElse: () => false,
+        ),
+      );
+
   //-                                                           Teacher Section
 
   /// Return the list of teaching courses
-  Iterable<CourseModel> get teachingCourses => where((model) => model.isTeacher);
+  Iterable<CourseModel> get teachingCourses => activeCourses.where((model) => model.isTeacher);
 
   /// Returns the assignments not yet turned in organized by courseId
   Map<String, List<StudentSubmission>> get pendingReviewSubmissions => teachingCourses
       .where(
-          (model) => (model.courseWorkSubmissions ?? emptySubmissionList).pendingReviewSubmissions.isNotEmpty == true)
+        (model) => (model.courseWorkSubmissions ?? emptySubmissionList).pendingReviewSubmissions.isNotEmpty == true,
+      )
       .toList()
       .asMap()
-      .map((key, model) =>
-          MapEntry(model.courseId, (model.courseWorkSubmissions ?? emptySubmissionList).pendingSubmissions));
+      .map(
+        (key, model) =>
+            MapEntry(model.courseId, (model.courseWorkSubmissions ?? emptySubmissionList).pendingSubmissions),
+      );
 
   /// Returns all reviewable (pending) submissions accross all teaching courses
   List<StudentSubmission> get allReviewableSubmissions => teachingCourses.fold<List<StudentSubmission>>(
-      [], (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []]).pendingReviewSubmissions;
+        [],
+        (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []],
+      ).pendingReviewSubmissions;
 
   /// Returns all reviewed submissions accross all teaching courses
   List<StudentSubmission> get allReviewedSubmissions => allReviewableSubmissions.completedSubmissions;
@@ -46,11 +71,13 @@ extension CourseModelExtensions on Iterable<CourseModel> {
   //-                                                           Student Section
 
   /// Return the list of enrolled courses
-  Iterable<CourseModel> get enrolledCourses => where((model) => !model.isTeacher);
+  Iterable<CourseModel> get enrolledCourses => activeCourses.where((model) => !model.isTeacher);
 
   /// Returns all reviewable (pending) submissions accross all teaching courses
   List<StudentSubmission> get allPendingSubmissions => enrolledCourses.fold<List<StudentSubmission>>(
-      [], (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []]).pendingSubmissions;
+        [],
+        (prev, curr) => [...prev, ...curr.courseWorkSubmissions ?? []],
+      ).pendingSubmissions;
 
   /// Returns all assignement submissions accross all enrolled courses
   List<StudentSubmission> get allAssignmentSubmissions =>
@@ -68,9 +95,10 @@ extension ExtendedCourseWorkSubmissionList on List<StudentSubmission> {
   /// NEW: The student has never accessed this submission. Attachments are not returned and timestamps is not set.\
   /// CREATED: Has been created.\
   /// RECLAIMED_BY_STUDENT: Student chose to "unsubmit" the assignment.
-  List<StudentSubmission> get pendingSubmissions => where((submission) =>
-          submission.state == 'NEW' || submission.state == 'CREATED' || submission.state == 'RECLAIMED_BY_STUDENT')
-      .toList();
+  List<StudentSubmission> get pendingSubmissions => where(
+        (submission) =>
+            submission.state == 'NEW' || submission.state == 'CREATED' || submission.state == 'RECLAIMED_BY_STUDENT',
+      ).toList();
 
   /// Returns all submissions that are marked as RETURNED:\
   /// RETURNED: Has been returned to the student.
@@ -89,7 +117,7 @@ extension ExtendedCourseWorkSubmissionList on List<StudentSubmission> {
       .toList()
       .asMap()
       .map((key, value) => MapEntry(value, where((s) => s.courseWorkId == value).toList()))
-        ..removeWhere((key, value) => value.isEmpty);
+    ..removeWhere((key, value) => value.isEmpty);
 
   /// Completed submissions percentage
   int get percentCompleted => ((completedSubmissions.length / length) * 100).round();

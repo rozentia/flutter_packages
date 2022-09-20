@@ -127,8 +127,9 @@ class GsuiteService {
       }
       if (scopesRequiringConsent.isNotEmpty) {
         _logMsg(
-            'The following scopes are missing in GoogleSignIn:\n${scopesRequiringConsent.join('\n')}\nPlease add them to GoogleSignIn instance',
-            'setClient');
+          'The following scopes are missing in GoogleSignIn:\n${scopesRequiringConsent.join('\n')}\nPlease add them to GoogleSignIn instance',
+          'setClient',
+        );
       }
       _client = client;
       _userEmail = userEmail;
@@ -138,10 +139,12 @@ class GsuiteService {
     }
     if (serviceAccountJSONCredentials == null ||
         serviceAccountJSONCredentials.isEmpty ||
+        // ignore: unnecessary_null_comparison
         userEmail == null ||
         userEmail.isEmpty) {
       throw Exception(
-          'Unable to set client: either [credentials: $serviceAccountJSONCredentials] or [email: $userEmail] are empty or null');
+        'Unable to set client: either [credentials: $serviceAccountJSONCredentials] or [email: $userEmail] are empty or null',
+      );
     }
     try {
       _client = await getAccessClient(serviceAccountJSONCredentials, userEmail);
@@ -270,7 +273,7 @@ class GsuiteService {
   //-                                                                             CALENDAR
 
   /// Returns all calendars available for the user the auth client is impersonating
-  Future<List<CalendarListEntry>> fetchUserCalendars([minAccessRole]) async {
+  Future<List<CalendarListEntry>> fetchUserCalendars([String? minAccessRole]) async {
     try {
       final calendarList = await _calendarApi.calendarList.list();
       return calendarList.items ?? [];
@@ -315,7 +318,8 @@ class GsuiteService {
       if (calendars.isEmpty) {
         final fetched = await _calendarApi.calendarList.list();
         calendars.addAll(
-            (fetched.items ?? []).where((element) => element.id != null).map<String>((calendar) => calendar.id!));
+          (fetched.items ?? []).where((element) => element.id != null).map<String>((calendar) => calendar.id!),
+        );
       }
       if (calendars.isEmpty) {
         return [];
@@ -627,6 +631,7 @@ class GsuiteService {
   Future<bool> acceptInvitation(String invitationId) async {
     try {
       final Empty response = await _classroomApi.invitations.accept(invitationId);
+      // ignore: unnecessary_type_check
       return response is Empty;
     } catch (e) {
       _logErr('acceptInvitation', e);
@@ -679,11 +684,13 @@ class GsuiteService {
         // if no MeetEvent found for the activity
         if (index == -1) {
           // add new MeetEvent
-          conferences.add(MeetEvent(
-            conferenceId: activity.callEndedEvent!.conferenceId!,
-            organizerEmail: activity.callEndedEvent!.organizerEmail,
-            meetingCode: activity.callEndedEvent!.meetingCode,
-          ));
+          conferences.add(
+            MeetEvent(
+              conferenceId: activity.callEndedEvent!.conferenceId!,
+              organizerEmail: activity.callEndedEvent!.organizerEmail,
+              meetingCode: activity.callEndedEvent!.meetingCode,
+            ),
+          );
           // set index to last item's index
           index = conferences.length - 1;
         }

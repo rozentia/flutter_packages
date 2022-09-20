@@ -73,12 +73,14 @@ extension ActivityEventsParameterGetter on ActivityEvents {
   String? get locationRegion => _getParameter('location_region');
   bool? get isExternal => parameters!.firstWhereOrNull((p) => p.name == 'is_external')?.boolValue;
   Duration get duration => Duration(
-        seconds: int.tryParse((parameters ?? [])
-                    .firstWhereOrNull(
-                      (p) => p.name == 'duration_seconds',
-                    )
-                    ?.intValue ??
-                '') ??
+        seconds: int.tryParse(
+              (parameters ?? [])
+                      .firstWhereOrNull(
+                        (p) => p.name == 'duration_seconds',
+                      )
+                      ?.intValue ??
+                  '',
+            ) ??
             0,
       );
 }

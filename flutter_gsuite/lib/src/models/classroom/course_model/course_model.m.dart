@@ -80,38 +80,44 @@ class CourseModel extends HiveObject {
           );
 
   /// Returns all CourseWorkMaterial organized by Topic
-  Map<String?, List<CourseWorkMaterial>> get sortedCourseWorkMaterials => topics!.asMap().map((key, topic) => MapEntry(
-        topic.topicId,
-        courseWorkMaterials!.where((material) => material.topicId == topic.topicId).toList(),
-      ));
+  Map<String?, List<CourseWorkMaterial>> get sortedCourseWorkMaterials => topics!.asMap().map(
+        (key, topic) => MapEntry(
+          topic.topicId,
+          courseWorkMaterials!.where((material) => material.topicId == topic.topicId).toList(),
+        ),
+      );
 
   /// Returns a map representation of the topics data where the keys are the topic name and
   /// the value is a dynamic list holding either CourseWorkMaterial or AggregatedCourseWork
   Map<String?, List<dynamic>> get topicData => topics!.asMap().map(
         (key, topic) => MapEntry(
-            topic.name,
-            concat([
-              sortedAggregatedCourseWorks[topic.topicId] ?? [],
-              sortedCourseWorkMaterials[topic.topicId] ?? [],
-            ]).toList()),
+          topic.name,
+          concat([
+            sortedAggregatedCourseWorks[topic.topicId] ?? [],
+            sortedCourseWorkMaterials[topic.topicId] ?? [],
+          ]).toList(),
+        ),
       )..addAll({
-          noTopicKey: concat([
-            courseWorks!
-                .where((courseWork) => courseWork.topicId == null)
-                .map((courseWork) => AggregatedCourseWork.fromCourseWork(
-                      null,
-                      courseWork,
-                      courseWorkSubmissions!,
-                    )),
-            courseWorkMaterials!.where((material) => material.topicId == null),
-          ]).toList()
-        });
+      noTopicKey: concat([
+        courseWorks!.where((courseWork) => courseWork.topicId == null).map(
+              (courseWork) => AggregatedCourseWork.fromCourseWork(
+                null,
+                courseWork,
+                courseWorkSubmissions!,
+              ),
+            ),
+        courseWorkMaterials!.where((material) => material.topicId == null),
+      ]).toList()
+    });
 
   //-                                                                            Functions
 
   /// Return a user by its [userIdOrEmailOrFullName] or null if not found
-  UserProfile? findRosterUser(String userIdOrEmailOrFullName,
-          {bool excludeStudents = false, bool excludeTeachers = true}) =>
+  UserProfile? findRosterUser(
+    String userIdOrEmailOrFullName, {
+    bool excludeStudents = false,
+    bool excludeTeachers = true,
+  }) =>
       !excludeStudents && !excludeTeachers
           ? null
           : concat([if (!excludeTeachers) teachers!, if (!excludeStudents) students!]).firstWhere(
@@ -119,7 +125,8 @@ class CourseModel extends HiveObject {
                   user!.id == userIdOrEmailOrFullName ||
                   user.emailAddress == userIdOrEmailOrFullName ||
                   user.name!.fullName == userIdOrEmailOrFullName,
-              orElse: () => null);
+              orElse: () => null,
+            );
 
   /// Returns the topic by tis [topicIdOrName] or null if not found
   Topic? findCourseTopic(String topicIdOrName) => topics!.firstWhereOrNull(

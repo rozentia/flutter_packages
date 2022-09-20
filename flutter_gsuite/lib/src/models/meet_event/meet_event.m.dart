@@ -41,7 +41,9 @@ class MeetEvent {
     return AttendeeData(
       end: data.map<DateTime?>((d) => d.end).toList().latest,
       duration: data.fold(
-          const Duration(), ((prev, curr) => prev + curr.duration!) as Duration? Function(Duration?, AttendeeData)),
+        // ignore: unnecessary_parenthesis
+        Duration.zero, ((prev, curr) => prev + curr.duration!) as Duration? Function(Duration?, AttendeeData),
+      ),
       identifier: data.first.identifier,
       identifierType: data.first.identifierType,
       isExternal: data.first.isExternal,
@@ -80,6 +82,7 @@ class MeetEvent {
 
   /// Add an [Activity] item to the [attended] map
   void addAttendee(Activity activity) {
+    // ignore: unnecessary_null_comparison
     if (activity == null || activity.callEndedEvent == null) return;
 
     final identifier = activity.callEndedEvent!.identifier ?? activity.callEndedEvent!.displayName ?? 'unidentifiable';

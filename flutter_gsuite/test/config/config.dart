@@ -1,7 +1,6 @@
 import 'package:flutter_gsuite/src/constants/constants.dart';
-
-import 'package:http/http.dart';
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:http/http.dart';
 import 'secrets.dart';
 
 /// Regular Test User 1

@@ -50,3 +50,31 @@ extension MinAccessRoleValue on MinAccessRole {
         orElse: () => '',
       );
 }
+
+@freezed
+class CourseState with _$CourseState {
+  /// No course state
+  const factory CourseState.unspecified() = Unspecified;
+
+  /// The course is active
+  const factory CourseState.active() = Active;
+
+  /// The course has been archived. You cannot modify it except to change it to a different state
+  const factory CourseState.archived() = Archived;
+
+  /// The course has been created, but not yet activated. It is accessible by the primary teacher
+  /// and domain administrators, who may modify it or change it to the ACTIVE or DECLINED states.
+  /// A course may only be changed to PROVISIONED if it is in the DECLINED state
+  const factory CourseState.provisioned() = Provisioned;
+
+  /// The course has been created, but declined. It is accessible by the course owner and domain administrators,
+  /// though it will not be displayed in the web UI.
+  /// You cannot modify the course except to change it to the PROVISIONED state.
+  /// A course may only be changed to DECLINED if it is in the PROVISIONED state
+  const factory CourseState.declined() = Declined;
+
+  /// The course has been suspended.
+  /// You cannot modify the course, and only the user identified by the owner_id can view the course.
+  /// A course may be placed in this state if it potentially violates the Terms of Service.
+  const factory CourseState.suspended() = Suspended;
+}
