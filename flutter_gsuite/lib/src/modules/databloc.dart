@@ -18,7 +18,7 @@ class DataBloc<T> {
   Future<void> fetchMore() async {
     if (_fetchMore == null) return;
     try {
-      final newValues = await _fetchMore!();
+      final newValues = await _fetchMore();
       valueList.addAll([...newValues]);
     } catch (e) {
       log(

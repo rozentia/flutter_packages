@@ -39,7 +39,7 @@ const List<String> ADMIN_SCOPES = [
   DirectoryApi.adminDirectoryGroupMemberScope,
   DirectoryApi.adminDirectoryGroupScope,
   //= Admin Reports
-  ReportsApi.adminReportsAuditReadonlyScope
+  ReportsApi.adminReportsAuditReadonlyScope,
 ];
 
 /*

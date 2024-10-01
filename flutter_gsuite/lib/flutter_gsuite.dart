@@ -1,13 +1,13 @@
+/// Management of Google Workspace data in Flutter
 library flutter_gsuite;
 
+import 'package:flutter_gsuite/src/constants/hive_constants.dart';
 import 'package:flutter_gsuite/src/models.dart';
 import 'package:flutter_gsuite/src/models/classroom/material/topic.adapter.dart';
 import 'package:googleapis/admin/directory_v1.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
-
-import 'src/constants/hive_constants.dart';
 
 export './src/constants/hive_constants.dart';
 export './src/extensions.dart';

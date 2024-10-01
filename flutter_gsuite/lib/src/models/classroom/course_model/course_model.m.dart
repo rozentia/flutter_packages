@@ -1,14 +1,12 @@
 import 'dart:developer';
 
-import 'package:collection/collection.dart' show IterableExtension;
+import 'package:flutter_gsuite/src/constants/constants.dart';
+import 'package:flutter_gsuite/src/constants/hive_constants.dart';
+import 'package:flutter_gsuite/src/models/classroom/course_model/aggregated_coursework.dart';
+import 'package:flutter_gsuite/src/models/classroom/course_model/course_model.extensions.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
-import 'package:quiver/iterables.dart';
-
-import '../../../constants/constants.dart';
-import '../../../constants/hive_constants.dart';
-import 'aggregated_coursework.dart';
-import 'course_model.extensions.dart';
+import 'package:shared_extensions/shared_extensions.dart';
 
 part 'course_model.m.g.dart';
 
@@ -97,18 +95,20 @@ class CourseModel extends HiveObject {
             sortedCourseWorkMaterials[topic.topicId] ?? [],
           ]).toList(),
         ),
-      )..addAll({
-      noTopicKey: concat([
-        courseWorks!.where((courseWork) => courseWork.topicId == null).map(
-              (courseWork) => AggregatedCourseWork.fromCourseWork(
-                null,
-                courseWork,
-                courseWorkSubmissions!,
+      )..addAll(
+      {
+        noTopicKey: concat([
+          courseWorks!.where((courseWork) => courseWork.topicId == null).map(
+                (courseWork) => AggregatedCourseWork.fromCourseWork(
+                  null,
+                  courseWork,
+                  courseWorkSubmissions!,
+                ),
               ),
-            ),
-        courseWorkMaterials!.where((material) => material.topicId == null),
-      ]).toList()
-    });
+          courseWorkMaterials!.where((material) => material.topicId == null),
+        ]).toList(),
+      },
+    );
 
   //-                                                                            Functions
 

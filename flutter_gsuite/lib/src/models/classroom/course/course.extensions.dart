@@ -1,6 +1,5 @@
+import 'package:flutter_gsuite/src/value_objects/value_objects.dart';
 import 'package:googleapis/classroom/v1.dart';
-
-import '../../../value_objects/value_objects.dart';
 
 extension ExtendedCourse on Course {
   /// Returns true if provided course is ahead of current course

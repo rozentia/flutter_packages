@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart' show IterableExtension;
-
-import '../course/course.extensions.dart';
+import 'package:flutter_gsuite/src/models/classroom/course/course.extensions.dart';
+import 'package:flutter_gsuite/src/models/classroom/course_model/course_model.m.dart';
 import 'package:googleapis/classroom/v1.dart';
-
-import 'course_model.m.dart';
 
 const emptySubmissionList = <StudentSubmission>[];
 

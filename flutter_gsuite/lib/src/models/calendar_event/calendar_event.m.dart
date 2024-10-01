@@ -1,7 +1,6 @@
+import 'package:flutter_gsuite/src/constants/hive_constants.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:hive/hive.dart';
-
-import '../../constants/hive_constants.dart';
 
 part 'calendar_event.m.g.dart';
 

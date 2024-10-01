@@ -1,7 +1,6 @@
+import 'package:flutter_gsuite/src/constants/hive_constants.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:hive/hive.dart';
-
-import '../../../constants/hive_constants.dart';
 
 class DateAdapter extends TypeAdapter<Date> {
   final int _typeId;

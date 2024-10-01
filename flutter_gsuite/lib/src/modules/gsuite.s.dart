@@ -1,18 +1,15 @@
 import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
+import 'package:flutter_gsuite/src/constants/constants.dart';
+import 'package:flutter_gsuite/src/models/calendar_event/calendar_event.m.dart';
+import 'package:flutter_gsuite/src/models/classroom/course_model/course_model.m.dart';
+import 'package:flutter_gsuite/src/value_objects/value_objects.dart';
 import 'package:googleapis/admin/directory_v1.dart' hide Empty;
-import 'package:googleapis/admin/reports_v1.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis/classroom/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:shared_extensions/shared_extensions.dart';
-
-import '../constants/constants.dart';
-import '../models/calendar_event/calendar_event.m.dart';
-import '../models/classroom/course_model/course_model.m.dart';
-import '../models/meet_event/meet_event.extensions.dart';
-import '../models/meet_event/meet_event.m.dart';
-import '../value_objects/value_objects.dart';
 
 const String _baseSrc = 'gsuiteService';
 void _logMsg(String msg, String src, [dynamic err]) => log(
@@ -22,6 +19,28 @@ void _logMsg(String msg, String src, [dynamic err]) => log(
     );
 void _logErr(String src, [dynamic err]) => _logMsg('error', src, err);
 void _logDone(String src) => _logMsg('success', src);
+
+class ListResponse<T> {
+  final List<T> items;
+  final String? nextPageToken;
+
+  ListResponse({required this.items, this.nextPageToken});
+}
+
+Future<List<T>> fetchAllPages<T>({
+  required Future<ListResponse<T>> Function(String? pageToken) apiCall,
+}) async {
+  final List<T> allItems = [];
+  String? nextPageToken;
+
+  do {
+    final response = await apiCall(nextPageToken);
+    allItems.addAll(response.items);
+    nextPageToken = response.nextPageToken;
+  } while (nextPageToken != null);
+
+  return allItems;
+}
 
 class GsuiteService {
   /// OAuth scopes required for the user's OAuth consent and GoogleSignIn instance
@@ -79,8 +98,8 @@ class GsuiteService {
       _client != null ? ClassroomApi(_client!) : throw Exception(noClientForApiMsg('ClassroomApi'));
   ClassroomApi get _adminClassroomApi =>
       _adminClient != null ? ClassroomApi(_adminClient!) : throw Exception(noClientForApiMsg('ClassroomApi'));
-  ReportsApi get _reportsApi =>
-      _adminClient != null ? ReportsApi(_adminClient!) : throw Exception(noClientForApiMsg('ReportsApi'));
+  // ReportsApi get _reportsApi =>
+  //     _adminClient != null ? ReportsApi(_adminClient!) : throw Exception(noClientForApiMsg('ReportsApi'));
 
   //-                                                                       @factoryMethod
   static Future<GsuiteService> init({
@@ -482,11 +501,11 @@ class GsuiteService {
   }) async {
     try {
       if (_userEmail == null) throw Exception('User not authenticated, unable to make the request');
-      final _course = course ?? await fetchSingleCourse(courseId);
+      final aCourse = course ?? await fetchSingleCourse(courseId);
       //= Return model without roster for enrolled courses
       if (isTeacher == false) {
         return CourseModel(
-          course: _course,
+          course: aCourse,
           teachers: [],
           students: [],
           userId: _userEmail!,
@@ -499,7 +518,7 @@ class GsuiteService {
       ]);
 
       return CourseModel(
-        course: _course,
+        course: aCourse,
         teachers: result[0],
         students: result[1],
         userId: _userEmail!,
@@ -525,8 +544,14 @@ class GsuiteService {
   /// * requires admin client
   Future<List<UserProfile>> fetchCourseStudents(String courseId) async {
     try {
-      final response = await _adminClassroomApi.courses.students.list(courseId);
-      return (response.students ?? []).map<UserProfile?>((student) => student.profile).toList().clean;
+      return await fetchAllPages<UserProfile>(
+        apiCall: (pageToken) => _adminClassroomApi.courses.students.list(courseId, pageToken: pageToken).then(
+              (value) => ListResponse(
+                items: (value.students ?? []).map<UserProfile?>((student) => student.profile).toList().clean,
+                nextPageToken: value.nextPageToken,
+              ),
+            ),
+      );
     } catch (e) {
       _logErr('fetchCourseStudents', e);
       rethrow;
@@ -645,70 +670,70 @@ class GsuiteService {
   /// time and [end] time or the last day if not provided.
   ///
   /// **Requires [client] with SuperAdmin privileges**
-  Future<List<MeetEvent>> getMeetReport({
-    DateTime? start,
-    DateTime? end,
-    String? userId,
-  }) async {
-    try {
-      final String startTime = start != null && start.isBefore(end!)
-          ? start.toUtc().toIso8601String()
-          : DateTime.now().subtract(const Duration(days: 7)).toUtc().toIso8601String();
-      final String endTime =
-          end != null && end.isAfter(start!) ? end.toUtc().toIso8601String() : DateTime.now().toUtc().toIso8601String();
+  // Future<List<MeetEvent>> getMeetReport({
+  //   DateTime? start,
+  //   DateTime? end,
+  //   String? userId,
+  // }) async {
+  // try {
+  // final String startTime = start != null && start.isBefore(end!)
+  //     ? start.toUtc().toIso8601String()
+  //     : DateTime.now().subtract(const Duration(days: 7)).toUtc().toIso8601String();
+  // final String endTime =
+  //     end != null && end.isAfter(start!) ? end.toUtc().toIso8601String() : DateTime.now().toUtc().toIso8601String();
 
-      final response = await _reportsApi.activities.list(
-        'all',
-        'meet',
-        maxResults: 1000,
-        eventName: 'call_ended',
-        startTime: startTime,
-        endTime: endTime,
-      );
+  // final response = await _reportsApi.activities.list(
+  //   'all',
+  //   'meet',
+  //   maxResults: 1000,
+  //   eventName: 'call_ended',
+  //   startTime: startTime,
+  //   endTime: endTime,
+  // );
 
-      if (response.items == null || response.items!.isEmpty) {
-        return [];
-      }
+  // if (response.items == null || response.items!.isEmpty) {
+  //   return [];
+  // }
 
-      final List<MeetEvent> conferences = [];
+  // final List<MeetEvent> conferences = [];
 
-      for (final activity in response.items!) {
-        // ignore activity items without callEndedEvent.conferenceId
-        if (activity.callEndedEvent == null || activity.callEndedEvent!.conferenceId == null) continue;
+  // for (final activity in response.items!) {
+  // ignore activity items without callEndedEvent.conferenceId
+  // if (activity.callEndedEvent == null || activity.callEndedEvent!.conferenceId == null) continue;
 
-        // find activity's related MeetEvent
-        int index = conferences.indexWhere(
-          (conference) => conference.conferenceId == activity.callEndedEvent!.conferenceId,
-        );
+  // find activity's related MeetEvent
+  // int index = conferences.indexWhere(
+  //   (conference) => conference.conferenceId == activity.callEndedEvent!.conferenceId,
+  // );
 
-        // if no MeetEvent found for the activity
-        if (index == -1) {
-          // add new MeetEvent
-          conferences.add(
-            MeetEvent(
-              conferenceId: activity.callEndedEvent!.conferenceId!,
-              organizerEmail: activity.callEndedEvent!.organizerEmail,
-              meetingCode: activity.callEndedEvent!.meetingCode,
-            ),
-          );
-          // set index to last item's index
-          index = conferences.length - 1;
-        }
-        // add the activity data to the related MeetEvent
-        conferences[index].addAttendee(activity);
-      }
+  // if no MeetEvent found for the activity
+  // if (index == -1) {
+  // add new MeetEvent
+  // conferences.add(
+  //   MeetEvent(
+  //     conferenceId: activity.callEndedEvent!.conferenceId!,
+  //     organizerEmail: activity.callEndedEvent!.organizerEmail,
+  //     meetingCode: activity.callEndedEvent!.meetingCode,
+  //   ),
+  // );
+  // set index to last item's index
+  // index = conferences.length - 1;
+  // }
+  // add the activity data to the related MeetEvent
+  // conferences[index].addAttendee(activity);
+  // }
 
-      // Filter by userId
-      if (userId != null) {
-        return conferences.where((conference) => conference.attended.containsKey(userId)).toList();
-      }
-      // If no userId provided just return all fetched conferences
-      return conferences;
-    } catch (e) {
-      _logErr('getMeetReport', e);
-      rethrow;
-    }
-  }
+  // Filter by userId
+  // if (userId != null) {
+  //   return conferences.where((conference) => conference.attended.containsKey(userId)).toList();
+  // }
+  // If no userId provided just return all fetched conferences
+  // return conferences;
+  // } catch (e) {
+  //   _logErr('getMeetReport', e);
+  //   rethrow;
+  // }
+  // }
 }
 
 /// Obtains oauth2 credentials by providing [serviceAccountJSONCredentials]
